@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/07/28 01:05:50 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/28 15:22:20 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -381,6 +381,9 @@ int main(int argc, char **argv)
 
     if (argc != 2)
         return (1);
+    /*glob = malloc(sizeof(t_glob));
+    if (!glob)
+        return (1);*/
     ft_parsing(argv[1], glob);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
@@ -392,5 +395,6 @@ int main(int argc, char **argv)
     mlx_hook(glob->win_ptr, 2, 0, ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
+   //free(glob);
     return (0);
 }
