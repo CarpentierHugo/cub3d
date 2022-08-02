@@ -268,16 +268,16 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
         {
             tx = (int)((rx + ry) / 2) % 32;
             if ((int)ry % 64 == 0)
-                if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '0')
+                if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
                     c = glob->n_img->data[(int)tx + (int)ty / 8 * 32];
             if ((int)ry % 64 == 63)
-                if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '0')
+                if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
                     c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
             if ((int)rx % 64 == 63)
-                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == '0')
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
                     c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
             if ((int)rx % 64 == 0)
-                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == '0')
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
                     c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
             mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, c);
             ty += ty_step;
