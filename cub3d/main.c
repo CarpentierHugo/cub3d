@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/07/28 15:22:20 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/02 03:24:15 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ void    ft_free_map(t_glob *glob)
 int ft_exit(t_glob *glob)
 {
     ft_free_map(glob);
+    mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
     exit (0);
 }
 
@@ -162,11 +166,11 @@ void    ft_draw_square(t_glob *glob, int posx, int posy, int color)
     int y;
 
     y = -1;
-    while (++y < RES)
+    while (++y < SQR_SIZE)
     {
         x = -1;
-        while (++x < RES)
-            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, posx * RES + x, posy * RES + y, color);
+        while (++x < SQR_SIZE)
+            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, posx * SQR_SIZE + x, posy * SQR_SIZE + y, color);
     }
 }
 
@@ -209,48 +213,75 @@ void    ft_draw_map(t_glob *glob)
             else
             {
                 //ft_draw_square(glob, x, y, 0x00CDCDCD);
-                if (glob->map[y][x] != '0' )
+                if (glob->map[y][x] != '0')
                 {
-                    glob->px = x * RES + RES/2;
-                    glob->py = y * RES + RES/2;
+                    glob->px = x * SQR_SIZE + SQR_SIZE / 2;
+                    glob->py = y * SQR_SIZE + SQR_SIZE / 2;
                     if (glob->map[y][x] == 'N')
                         glob->pa = 3 * PI / 2;
                     if (glob->map[y][x] == 'S')
-                        glob->pa = PI/2;
+                        glob->pa = PI / 2;
                     if (glob->map[y][x] == 'E')
                         glob->pa = 0;
                     if (glob->map[y][x] == 'W')
                         glob->pa = PI;
-                    glob->pdx = cos(glob->pa) * MOV_SPD;
-                    glob->pdy = sin(glob->pa) * MOV_SPD;
                 }
             }
         }
     }
 }
 
-void    ft_modelisation(t_glob *glob, float ca, int length, int i, int color)
+void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, float ra)
 {
     float   lineh;
     float   lineo;
     int     x;
     int     y;
+    float   ty;
+    float   tx;
+    float   ty_step;
+    int     c;
+    float   ty_off;
+    float   ca;
 
+    ca = glob->pa - ra;
     if (ca < 0)
         ca += 2 * PI;
     if (ca > 2 * PI)
         ca -= 2 * PI;
     length *= cos(ca);
-    lineh = RES * 320 / length;
-    if (lineh > 320)
-        lineh = 320;
-    lineo = 160 - lineh/2;
+    lineh = SQR_SIZE * SCREEN_W / length;
+    ty_step = 32/lineh;
+    ty_off = 0;
+    if (lineh > SCREEN_W)
+    {
+        ty_off = (lineh - SCREEN_W) * 4;
+        lineh = SCREEN_W;
+    }
+    lineo = 160 - (lineh / 2);
     y = -1;
+    ty = ty_off * ty_step;
     while (++y < lineh)
     {
         x = -1;
         while (++x < 8)
-            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, color);
+        {
+            tx = (int)((rx + ry) / 2) % 32;
+            if ((int)ry % 64 == 0)
+                if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '0')
+                    c = glob->n_img->data[(int)tx + (int)ty / 8 * 32];
+            if ((int)ry % 64 == 63)
+                if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '0')
+                    c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
+            if ((int)rx % 64 == 63)
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == '0')
+                    c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
+            if ((int)rx % 64 == 0)
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == '0')
+                    c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
+            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, c);
+            ty += ty_step;
+        }
     }
 }
 
@@ -260,7 +291,7 @@ void    ft_background(t_glob *glob)
     int y;
 
     y = -1;
-    while (++y < 320)
+    while (++y < SCREEN_W)
     {
         x = -1;
         while (++x < 8 * FOV)
@@ -277,29 +308,35 @@ void    ft_move(t_glob *glob, int key)
 {
     if (key == Z)
     {
-        glob->px += glob->pdx;
-        glob->py += glob->pdy;
+        glob->px += cos(glob->pa) * MOV_SPD;
+        glob->py += sin(glob->pa) * MOV_SPD;
     }
     if (key == Q)
+    {
+        glob->px += sin(glob->pa) * MOV_SPD;
+        glob->py -= cos(glob->pa) * MOV_SPD;
+    }
+    if (key == S)
+    {
+        glob->px -= cos(glob->pa) * MOV_SPD;
+        glob->py -= sin(glob->pa) * MOV_SPD;
+    }
+    if (key == D)
+    {
+        glob->px -= sin(glob->pa) * MOV_SPD;
+        glob->py += cos(glob->pa) * MOV_SPD;
+    }
+    if (key == L_ARROW)
     {
         glob->pa -= ROT_SPD;
         if (glob->pa < 0)
             glob->pa += 2 * PI;
-        glob->pdx = cos(glob->pa) * MOV_SPD;
-        glob->pdy = sin(glob->pa) * MOV_SPD;
     }
-    if (key == S)
-    {
-        glob->px -= glob->pdx;
-        glob->py -= glob->pdy;
-    }
-    if (key == D)
+    if (key == R_ARROW)
     {
         glob->pa += ROT_SPD;
         if (glob->pa > 2 * PI)
             glob->pa -= 2 * PI;
-        glob->pdx = cos(glob->pa) * MOV_SPD;
-        glob->pdy = sin(glob->pa) * MOV_SPD;
     }
 }
 
@@ -319,7 +356,7 @@ int ft_raytesting(t_glob glob, int key)
         x = glob.px;
         y = glob.py;
         length = 0;
-        while (glob.map[(int)(y / RES)][(int)(x / RES)] != '1')
+        while (glob.map[(int)(y / SQR_SIZE)][(int)(x / SQR_SIZE)] != '1')
         {
             x += cos(ra);
             y += sin(ra);
@@ -327,12 +364,12 @@ int ft_raytesting(t_glob glob, int key)
         }
         if (length <= 4)
             return (1);
-        ra += PI / 180;
+        ra += DR;
     }
     return (0);
 }
 
-void    ft_raycasting(t_glob *glob, int color)
+void    ft_raycasting(t_glob *glob)
 {
     float   x;
     float   y;
@@ -348,31 +385,51 @@ void    ft_raycasting(t_glob *glob, int color)
         x = glob->px;
         y = glob->py;
         length = 0;
-        while (glob->map[(int)(y / RES)][(int)(x / RES)] != '1')
+        while (glob->map[(int)(y / SQR_SIZE)][(int)(x / SQR_SIZE)] != '1')
         {
             //mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x, y, color);
             x += cos(ra);
             y += sin(ra);
             length++;
         }
-        ft_modelisation(glob, glob->pa - ra, length, i, color);
-        ra += PI / 180;
+        ft_modelisation(glob, length, i, x, y, ra);
+        ra += DR;
     }
 }
 
 int ft_deal_key(int key, t_glob *glob)
 {
-   if (key == Z || key == Q || key == S || key == D)
+   if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
         //ft_draw_player(glob, 8, 0x00CDCDCD);
         if (!ft_raytesting(*glob, key))
             ft_move(glob, key);
         //ft_draw_player(glob, 8, 0x00FFFF00);
-        ft_raycasting(glob, 0x00CDCDCD);
+        ft_raycasting(glob);
     }
     if (key == 53)
         ft_exit(glob);
     return (0);
+}
+
+void    ft_image_test(t_glob *glob)
+{   
+    glob->n_img->h = 32;
+    glob->n_img->w = 32;
+    glob->n_img->bpp = 8;
+    glob->n_img->sl = 8 * 32;
+    glob->n_img->e = 0;
+    *glob->s_img = *glob->n_img;
+    *glob->n_img = *glob->e_img;
+    *glob->e_img = *glob->w_img;
+    glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/mossy_cobblestone.xpm", &glob->n_img->w, &glob->n_img->h);
+    glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
+    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobblestone.xpm", &glob->s_img->w, &glob->s_img->h);
+    glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
+    glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobbled_deepslate.xpm", &glob->e_img->w, &glob->e_img->h);
+    glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr, &glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
+    glob->w_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/netherrack.xpm", &glob->w_img->w, &glob->w_img->h);
+    glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 }
 
 int main(int argc, char **argv)
@@ -381,20 +438,17 @@ int main(int argc, char **argv)
 
     if (argc != 2)
         return (1);
-    /*glob = malloc(sizeof(t_glob));
-    if (!glob)
-        return (1);*/
     ft_parsing(argv[1], glob);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (1);
-	glob->win_ptr = mlx_new_window(glob->mlx_ptr, 1024, 512, "cub3d");
+	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_H, SCREEN_W, "cub3d");
     ft_draw_map(glob);
     //ft_draw_player(glob, 8, 0x00FFFF00);
-    ft_raycasting(glob, 0x00CDCDCD);
+    ft_image_test(glob);
+    ft_raycasting(glob);
     mlx_hook(glob->win_ptr, 2, 0, ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
-   //free(glob);
     return (0);
 }
