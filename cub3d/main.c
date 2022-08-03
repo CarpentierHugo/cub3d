@@ -244,7 +244,7 @@ int get_texture_color(t_glob *glob, float tx, float ty)
     return (0x00000000);
 }
 
-void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, float ra)
+void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, float ra, int **data)
 {
     float   lineh;
     float   lineo;
@@ -256,6 +256,8 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     int     c;
     float   ty_off;
     float   ca;
+    int     j;
+    int     k;
 
     ca = glob->pa - ra;
     if (ca < 0)
@@ -323,9 +325,26 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
                     }
               //  }
             //}
-            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, c);
+            //data[0][(int)((x + i * 8) + ((y + lineo) * SCREEN_W))] = c;
+            //data[0][(int)((SCREEN_W * o))];
+            data[0][(int)(((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W))))] = c;
+            //mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, c);
             ty += ty_step;
         }
+    }
+    j = -1;
+    while (++j < lineo)
+    {
+        k = -1;
+        while (++k < 8)
+            data[0][(int)((i * 8 + k) + (j * (SCREEN_W)))] = 0x00FFFFFF;
+    }
+    j = lineo + lineh - 1;
+    while (++j < SCREEN_H)
+    {
+        k = -1;
+        while (++k < 8)
+            data[0][(int)((i * 8 + k) + (j * (SCREEN_W)))] = 0x00CDCDCD;
     }
 }
 
@@ -420,8 +439,12 @@ void    ft_raycasting(t_glob *glob)
     float   ra;
     int     length;
     int     i;
+    void    *image;
+    int     *data;
 
-    ft_background(glob);
+    //ft_background(glob);
+    image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
+    data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
     i = -1;
     while (++i < FOV)
@@ -436,9 +459,10 @@ void    ft_raycasting(t_glob *glob)
             ry += sin(ra);
             length++;
         }
-        ft_modelisation(glob, length, i, rx, ry, ra);
+        ft_modelisation(glob, length, i, rx, ry, ra, &data);
         ra += DR;
     }
+    mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
 }
 
 int ft_deal_key(int key, t_glob *glob)
@@ -457,7 +481,7 @@ int ft_deal_key(int key, t_glob *glob)
 }
 
 void    ft_image_test(t_glob *glob)
-{   
+{
     glob->n_img->h = 32;
     glob->n_img->w = 32;
     glob->n_img->bpp = 8;
@@ -493,7 +517,7 @@ int main(int argc, char **argv)
     ft_image_test(glob);
     ft_raycasting(glob);
     mlx_key_hook (glob->win_ptr, &ft_deal_key, glob);
-    //mlx_hook(glob->win_ptr, 2, 0, &ft_deal_key, glob);
+    //mlx_hook(glob->win_ptr, 2, 0, ft_deal_key, &glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
     free(glob);
