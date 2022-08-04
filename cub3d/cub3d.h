@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 15:57:03 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 17:07:51 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,7 @@ typedef struct  s_glob
     float   py;
     float   pa;
 }   t_glob;
+
+void    ft_get_textures(t_glob *glob, int i, int j);
 
 #endif

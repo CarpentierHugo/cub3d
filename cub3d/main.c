@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 13:54:33 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 17:34:16 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void    ft_verif_map(char **map)
     iszero = 0;
     ispos = 0;
     y = -1;
-    while (map[++y])
+/*    while (map[++y])
     {
         x = -1;
         while (map[y][++x])
@@ -127,7 +127,7 @@ void    ft_verif_map(char **map)
         }
     }
     if (!isone || !iszero || !ispos)
-        exit(1);
+        exit(1);*/
 }
 
 void    ft_parsing(char *mapfile, t_glob *glob)
@@ -473,13 +473,13 @@ void    ft_screen_test(t_glob *glob)
     *glob->s_img = *glob->n_img;
     *glob->n_img = *glob->e_img;
     *glob->e_img = *glob->w_img;
-    glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/mossy_cobblestone.xpm", &glob->n_img->w, &glob->n_img->h);
+    glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
-    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobblestone.xpm", &glob->s_img->w, &glob->s_img->h);
+    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobblestone.xpm", &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??
     glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
-    glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobbled_deepslate.xpm", &glob->e_img->w, &glob->e_img->h);
+    glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
     glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr, &glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
-    glob->w_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/netherrack.xpm", &glob->w_img->w, &glob->w_img->h);
+    glob->w_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->w_img->path_texture, &glob->w_img->w, &glob->w_img->h);
     glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 }
 
@@ -490,6 +490,8 @@ int main(int argc, char **argv)
     if (argc != 2)
         return (1);
     ft_parsing(argv[1], glob);
+    ft_get_textures(glob, -1, 0);
+    printf("%s\n%s\n%s\n%s\n", glob->n_img->path_texture, glob->s_img->path_texture, glob->w_img->path_texture, glob->e_img->path_texture);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (1);

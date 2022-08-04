@@ -1,4 +1,4 @@
-SRC	=		main.c
+SRC	=		main.c ft_get_textures.c
 
 OBJ	=		$(SRC:.c=.o)
 

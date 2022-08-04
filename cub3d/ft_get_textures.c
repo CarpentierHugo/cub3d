@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/04 15:58:07 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 17:33:06 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,56 @@ static int  check_direction(char first, char second)
     return (0);
 }
 
-static void ft_north_texture(t_glob *glob, char *texture, int j, int length)
+static void ft_north_texture(t_glob *glob, char *texture, int length)
 {
     int i;
 
     i = -1;
     glob->n_img->path_texture = malloc(sizeof(char) * length);
-    while (++i < length - 1 && texture[j] && texture[j] != ' ')
+    while (texture[++i] && texture[i] != ' ')
     {
-        glob->n_img->path_texture[i] = texture[j];
-        j++;
+        glob->n_img->path_texture[i] = texture[i];
     }
     glob->n_img->path_texture[i] = '\0';
+}
+
+static void ft_south_texture(t_glob *glob, char *texture, int length)
+{
+    int i;
+
+    i = -1;
+    glob->s_img->path_texture = malloc(sizeof(char) * length);
+    while (texture[++i] && texture[i] != ' ')
+    {
+        glob->s_img->path_texture[i] = texture[i];
+    }
+    glob->s_img->path_texture[i] = '\0';
+}
+
+static void ft_west_texture(t_glob *glob, char *texture, int length)
+{
+    int i;
+
+    i = -1;
+    glob->w_img->path_texture = malloc(sizeof(char) * length);
+    while (texture[++i] && texture[i] != ' ')
+    {
+        glob->w_img->path_texture[i] = texture[i];
+    }
+    glob->w_img->path_texture[i] = '\0';
+}
+
+static void ft_east_texture(t_glob *glob, char *texture, int length)
+{
+    int i;
+
+    i = -1;
+    glob->e_img->path_texture = malloc(sizeof(char) * length);
+    while (texture[++i] && texture[i] != ' ')
+    {
+        glob->e_img->path_texture[i] = texture[i];
+    }
+    glob->e_img->path_texture[i] = '\0';
 }
 
 static void ft_path_texture(t_glob *glob, char direction, int j, char *texture)
@@ -55,13 +93,13 @@ static void ft_path_texture(t_glob *glob, char direction, int j, char *texture)
     while (texture[len] && texture[len] != ' ')
         len++;
     if (direction == 'N')
-        ft_north_texture(glob, texture, j, len - j + 2);
+        ft_north_texture(glob, texture, len - j + 2);
     if (direction == 'S')
-        ft_south_texture(glob, texture, j, len - j + 2);
+        ft_south_texture(glob, texture, len - j + 2);
     if (direction == 'W')
-        ft_west_texture(glob, texture, j, len - j + 2);
+        ft_west_texture(glob, texture, len - j + 2);
     if (direction == 'E')
-        ft_east_texture(glob, texture, j, len - j + 2);
+        ft_east_texture(glob, texture, len - j + 2);
 }
 
 void    ft_get_textures(t_glob *glob, int i, int j)
@@ -85,5 +123,7 @@ void    ft_get_textures(t_glob *glob, int i, int j)
             ft_path_texture(glob, direction, j, glob->map[i] + j);
             count_texture++;
         }
+        j = 0;
+        direction = '\0';
     }
 }
