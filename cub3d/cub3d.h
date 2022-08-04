@@ -34,11 +34,11 @@
 #define PI 3.1415926535
 #define DR PI / 180
 #define SQR_SIZE 64
-#define FOV 100
+#define FOV 60
 #define MOV_SPD 10
 #define ROT_SPD 0.2
-#define SCREEN_H 320
-#define SCREEN_W 8 * FOV
+#define SCREEN_H 1080 / 1.33333333333
+#define SCREEN_W 1920 / 1.33333333333
 
 #include <fcntl.h>
 #include <unistd.h>

@@ -270,7 +270,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     if (ca > 2 * PI)
         ca -= 2 * PI;
     length *= cos(ca);
-    lineh = SQR_SIZE * SCREEN_H / length;
+    lineh = SQR_SIZE * SCREEN_H / length * 1.3;
     ty_step = 32 / lineh; //remplacer 32
     ty_off = 0;
     if (lineh > SCREEN_H)
@@ -427,7 +427,7 @@ void    ft_raycasting(t_glob *glob)
     data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
     i = -1;
-    while (++i < FOV)
+    while (++i < FOV * 3)
     {
         rx = glob->px;
         ry = glob->py;
@@ -439,7 +439,7 @@ void    ft_raycasting(t_glob *glob)
             length++;
         }
         ft_modelisation(glob, length, i, rx, ry, ra, &data);
-        ra += DR;
+        ra += (DR / 3);
     }
     mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
     mlx_destroy_image(glob->mlx_ptr, image);
