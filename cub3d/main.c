@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 13:30:28 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 13:54:33 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     int     size;
     int     i;
 
+    glob->map = NULL;
     i = 0;
     while (mapfile[i])
         i++;
@@ -499,6 +500,30 @@ void    ft_image_test(t_glob *glob)
     glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 }
 
+void    ft_free(t_glob *glob)
+{
+    int i;
+
+    i = -1;
+    if (glob->map != NULL)
+    {
+        while (glob->map[++i] != 0)
+            free(glob->map[i]);
+        free(glob->map);
+    }
+    mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
+    free(glob->n_img->data);
+    free(glob->s_img->data);
+    free(glob->e_img->data);
+    free(glob->w_img->data);
+	mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
+    free(glob->mlx_ptr);
+    free(glob);
+}
+
 int main(int argc, char **argv)
 {
     t_glob   *glob;
@@ -519,6 +544,6 @@ int main(int argc, char **argv)
     mlx_hook(glob->win_ptr, 2, 1L<<0, &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
-    free(glob);
+    ft_free(glob);
     return (0);
 }
