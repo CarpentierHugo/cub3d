@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 17:49:55 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 18:21:42 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -492,7 +492,7 @@ void    ft_screen_test(t_glob *glob)
     ft_init_img(glob);
     glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
-    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobblestone.xpm", &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??
+    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??
     glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
     glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr, &glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
@@ -508,6 +508,8 @@ int main(int argc, char **argv)
         return (1);
     ft_parsing(argv[1], glob);
     ft_get_textures(glob, -1, 0);
+    if (glob->s_img->path_texture == NULL)
+        printf("Faut gérer quand y a trop de texture SUU\n");
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (1);
