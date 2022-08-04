@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 17:34:16 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 17:49:55 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -463,16 +463,33 @@ int ft_deal_key(int key, void *param)
     return (0);
 }
 
-void    ft_screen_test(t_glob *glob)
+void    ft_init_img(t_glob *glob)
 {
     glob->n_img->h = 32;
     glob->n_img->w = 32;
     glob->n_img->bpp = 8;
     glob->n_img->sl = 8 * 32;
     glob->n_img->e = 0;
-    *glob->s_img = *glob->n_img;
-    *glob->n_img = *glob->e_img;
-    *glob->e_img = *glob->w_img;
+    glob->s_img->h = 32;
+    glob->s_img->w = 32;
+    glob->s_img->bpp = 8;
+    glob->s_img->sl = 8 * 32;
+    glob->s_img->e = 0;
+    glob->w_img->h = 32;
+    glob->w_img->w = 32;
+    glob->w_img->bpp = 8;
+    glob->w_img->sl = 8 * 32;
+    glob->w_img->e = 0;
+    glob->e_img->h = 32;
+    glob->e_img->w = 32;
+    glob->e_img->bpp = 8;
+    glob->e_img->sl = 8 * 32;
+    glob->e_img->e = 0;
+}
+
+void    ft_screen_test(t_glob *glob)
+{
+    ft_init_img(glob);
     glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
     glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, "textures/cobblestone.xpm", &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??
@@ -491,7 +508,6 @@ int main(int argc, char **argv)
         return (1);
     ft_parsing(argv[1], glob);
     ft_get_textures(glob, -1, 0);
-    printf("%s\n%s\n%s\n%s\n", glob->n_img->path_texture, glob->s_img->path_texture, glob->w_img->path_texture, glob->e_img->path_texture);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (1);
