@@ -251,8 +251,8 @@ int get_texture_color(t_glob *glob, float tx, float ty)
 
 void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, float ra, int **data)
 {
-    float   lineh;
-    float   lineo;
+    int     lineh;
+    int   lineo;
     int     x;
     int     y;
     float   ty;
@@ -271,7 +271,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
         ca -= 2 * PI;
     length *= cos(ca);
     lineh = SQR_SIZE * SCREEN_H / length * 1.3;
-    ty_step = 32 / lineh; //remplacer 32
+    ty_step = 32 / (float)lineh; //remplacer 32
     ty_off = 0;
     if (lineh > SCREEN_H)
     {
@@ -406,7 +406,7 @@ int ft_raytesting(t_glob glob, int key)
             y += sin(ra);
             length++;
         }
-        if (length <= 4)
+        if (length <= 1)
             return (1);
         ra += DR;
     }

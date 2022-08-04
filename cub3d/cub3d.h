@@ -35,8 +35,8 @@
 #define DR PI / 180
 #define SQR_SIZE 64
 #define FOV 60
-#define MOV_SPD 10
-#define ROT_SPD 0.2
+#define MOV_SPD 7.5
+#define ROT_SPD 0.1
 #define SCREEN_H 1080 / 1.33333333333
 #define SCREEN_W 1920 / 1.33333333333
 
