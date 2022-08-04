@@ -12,7 +12,7 @@ RM =		rm -f
 all: $(NAME)
 
 %.o: %.c
-			$(CC) $(CFLAGS) -I/usr/include -Imlx -c $< -o $@
+			$(CC) -I/usr/include -Imlx -c $< -o $@
 
 $(NAME): $(OBJ)
 			$(CC) $(OBJ) -Lmlx -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz -o $(NAME)

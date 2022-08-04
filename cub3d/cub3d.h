@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/02 03:24:19 by hcarpent         ###   ########.fr       */
+/*   Updated: 2022/08/04 15:57:03 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 
 typedef struct  s_img
 {
+    char    *path_texture;
     void    *ptr;
     int     *data;
     int     h;
@@ -68,6 +69,8 @@ typedef struct  s_glob
     t_img   s_img[1];
     t_img   e_img[1];
     t_img   w_img[1];
+    int     floor;
+    int     ceiling;
     float   px;
     float   py;
     float   pa;

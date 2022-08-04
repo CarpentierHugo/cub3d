@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 13:54:33 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 15:48:38 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
                     }
               //  }
             //}
-            data[0][(int)(((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W))))] = c;
+            data[0][(int)((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W)))] = c;
             ty += ty_step;
         }
     }
