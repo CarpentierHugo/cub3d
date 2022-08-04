@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/02 03:24:15 by hcarpent         ###   ########.fr       */
+/*   Updated: 2022/08/04 13:30:28 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,10 +325,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
                     }
               //  }
             //}
-            //data[0][(int)((x + i * 8) + ((y + lineo) * SCREEN_W))] = c;
-            //data[0][(int)((SCREEN_W * o))];
             data[0][(int)(((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W))))] = c;
-            //mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x + i * 8, y + lineo, c);
             ty += ty_step;
         }
     }
@@ -454,7 +451,6 @@ void    ft_raycasting(t_glob *glob)
         length = 0;
         while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
         {
-            //mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x, y, color);
             rx += cos(ra);
             ry += sin(ra);
             length++;
@@ -465,9 +461,12 @@ void    ft_raycasting(t_glob *glob)
     mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
 }
 
-int ft_deal_key(int key, t_glob *glob)
+int ft_deal_key(int key, void *param)
 {
-   if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
+    t_glob *glob;
+
+    glob = (t_glob *)param;
+    if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
         //ft_draw_player(glob, 8, 0x00CDCDCD);
         if (!ft_raytesting(*glob, key))
@@ -516,8 +515,8 @@ int main(int argc, char **argv)
     //ft_draw_player(glob, 8, 0x00FFFF00);
     ft_image_test(glob);
     ft_raycasting(glob);
-    mlx_key_hook (glob->win_ptr, &ft_deal_key, glob);
-    //mlx_hook(glob->win_ptr, 2, 0, ft_deal_key, &glob);
+    //mlx_key_hook (glob->win_ptr, &ft_deal_key, glob);
+    mlx_hook(glob->win_ptr, 2, 1L<<0, &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
     free(glob);
