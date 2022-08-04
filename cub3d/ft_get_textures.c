@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/04 17:50:25 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 18:20:58 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ static int  check_direction(char first, char second)
     return (0);
 }
 
-static void ft_north_texture(t_glob *glob, char *texture, int length)
+static int ft_north_texture(t_glob *glob, char *texture, int length)
 {
     int i;
 
+    if (glob->n_img->path_texture != NULL)
+        return (1);
     i = -1;
     glob->n_img->path_texture = malloc(sizeof(char) * length + 10);
     while (texture[++i] && texture[i] != ' ')
@@ -44,12 +46,15 @@ static void ft_north_texture(t_glob *glob, char *texture, int length)
         glob->n_img->path_texture[i] = texture[i];
     }
     glob->n_img->path_texture[i] = '\0';
+    return (0);
 }
 
-static void ft_south_texture(t_glob *glob, char *texture, int length)
+static int ft_south_texture(t_glob *glob, char *texture, int length)
 {
     int i;
 
+    if (glob->s_img->path_texture != NULL)
+        return (1);
     i = -1;
     glob->s_img->path_texture = malloc(sizeof(char) * length);
     while (texture[++i] && texture[i] != ' ')
@@ -57,12 +62,15 @@ static void ft_south_texture(t_glob *glob, char *texture, int length)
         glob->s_img->path_texture[i] = texture[i];
     }
     glob->s_img->path_texture[i] = '\0';
+    return (0);
 }
 
-static void ft_west_texture(t_glob *glob, char *texture, int length)
+static int ft_west_texture(t_glob *glob, char *texture, int length)
 {
     int i;
 
+    if (glob->w_img->path_texture != NULL)
+        return (1);
     i = -1;
     glob->w_img->path_texture = malloc(sizeof(char) * length);
     while (texture[++i] && texture[i] != ' ')
@@ -70,12 +78,15 @@ static void ft_west_texture(t_glob *glob, char *texture, int length)
         glob->w_img->path_texture[i] = texture[i];
     }
     glob->w_img->path_texture[i] = '\0';
+    return (0);
 }
 
-static void ft_east_texture(t_glob *glob, char *texture, int length)
+static int ft_east_texture(t_glob *glob, char *texture, int length)
 {
     int i;
 
+    if (glob->e_img->path_texture != NULL)
+        return (1);
     i = -1;
     glob->e_img->path_texture = malloc(sizeof(char) * length);
     while (texture[++i] && texture[i] != ' ')
@@ -83,23 +94,26 @@ static void ft_east_texture(t_glob *glob, char *texture, int length)
         glob->e_img->path_texture[i] = texture[i];
     }
     glob->e_img->path_texture[i] = '\0';
+    return (0);
 }
 
-static void ft_path_texture(t_glob *glob, char direction, int j, char *texture)
+static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
 {
     int len;
-
+    int ret;
+    
     len = j;
     while (texture[len] && texture[len] != ' ')
         len++;
     if (direction == 'N')
-        ft_north_texture(glob, texture, len - j + 4);
+        ret = ft_north_texture(glob, texture, len - j + 4);
     if (direction == 'S')
-        ft_south_texture(glob, texture, len - j + 4);
+        ret = ft_south_texture(glob, texture, len - j + 4);
     if (direction == 'W')
-        ft_west_texture(glob, texture, len - j + 4);
+        ret = ft_west_texture(glob, texture, len - j + 4);
     if (direction == 'E')
-        ft_east_texture(glob, texture, len - j + 4);
+        ret = ft_east_texture(glob, texture, len - j + 4);
+    return (ret);
 }
 
 void    ft_get_textures(t_glob *glob, int i, int j)
@@ -108,6 +122,10 @@ void    ft_get_textures(t_glob *glob, int i, int j)
     char    direction;
 
     count_texture = 0;
+    glob->n_img->path_texture = NULL;
+    glob->s_img->path_texture = NULL;
+    glob->w_img->path_texture = NULL;
+    glob->e_img->path_texture = NULL;
     while (glob->map[++i][j] && count_texture < 4)
     {
         while (glob->map[i][j] && glob->map[i][j] == ' ')
@@ -120,8 +138,10 @@ void    ft_get_textures(t_glob *glob, int i, int j)
             j++;
         if (glob->map[i][j])
         {
-            ft_path_texture(glob, direction, j, glob->map[i] + j);
-            count_texture++;
+            if (ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
+                count_texture++;
+            else
+                break; //gérer l'erreur (plusieurs texture pour la même direction)
         }
         j = 0;
         direction = '\0';
