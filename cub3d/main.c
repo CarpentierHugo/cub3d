@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 15:48:38 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/04 13:54:33 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int ft_exit(t_glob *glob)
     mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
-    exit (0);
+    mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
+	mlx_loop_end(glob->mlx_ptr);
+    return (0);
 }
 
 int ft_count_words(char *str, char c)
@@ -76,6 +78,7 @@ char    **ft_split_modif(char *str, char c)
         tab[i] = malloc(sizeof(char) * (j + 1));
         if (!tab[i])
             return (NULL);
+        tab[i][j] = '\0';
         str -= j;
         j = 0;
         while (*str != c && *str)
@@ -158,6 +161,7 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     read(fd, mapstr, size);
     close(fd);
     glob->map = ft_split_modif(mapstr, '\n');
+    free(mapstr);
     ft_verif_map(glob->map);
 }
 
@@ -294,39 +298,37 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
                 else if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
                     c = glob->n_img->data[(int)tx + (int)ty / 8 * 32];
             }   
-                    if ((int)ry % 64 == 63)
-                    {  
-                            if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
-                            {
-                                if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
-                                    c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
-                            }
-                            else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
-                                c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
-                    }
-                    if ((int)rx % 64 == 63)
-                    {  
-                            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
-                            {
-                                if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)])
-                                    c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
-                            }
-                            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
-                                c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
-                    }
-                    if ((int)rx % 64 == 0)
-                    {  
-                            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
-                            {
-                                if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)])
-                                    c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
-                            }
-                            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
-                                c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
-                    }
-              //  }
-            //}
-            data[0][(int)((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W)))] = c;
+            if ((int)ry % 64 == 63)
+            {  
+                if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
+                {
+                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
+                        c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
+                }
+                else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+                    c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
+            }
+            if ((int)rx % 64 == 63)
+            {  
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
+                {
+                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)])
+                        c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
+                }
+                else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
+                    c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
+            }
+            if ((int)rx % 64 == 0)
+            {  
+                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
+                {
+                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)])
+                        c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
+                }
+                else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
+                    c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
+            }
+            data[0][(int)(((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W))))] = c;
             ty += ty_step;
         }
     }
@@ -343,25 +345,6 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
         k = -1;
         while (++k < 8)
             data[0][(int)((i * 8 + k) + (j * (SCREEN_W)))] = 0x00CDCDCD;
-    }
-}
-
-void    ft_background(t_glob *glob)
-{
-    int x;
-    int y;
-
-    y = -1;
-    while (++y < SCREEN_H)
-    {
-        x = -1;
-        while (++x < SCREEN_W)
-        {
-            if (y <= SCREEN_H / 2)
-                mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x, y, 0x000000FF);
-            else
-                mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, x, y, 0x008B4513);
-        }
     }
 }
 
@@ -440,7 +423,6 @@ void    ft_raycasting(t_glob *glob)
     void    *image;
     int     *data;
 
-    //ft_background(glob);
     image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
@@ -460,6 +442,7 @@ void    ft_raycasting(t_glob *glob)
         ra += DR;
     }
     mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
+    mlx_destroy_image(glob->mlx_ptr, image);
 }
 
 int ft_deal_key(int key, void *param)
@@ -480,7 +463,7 @@ int ft_deal_key(int key, void *param)
     return (0);
 }
 
-void    ft_image_test(t_glob *glob)
+void    ft_screen_test(t_glob *glob)
 {
     glob->n_img->h = 32;
     glob->n_img->w = 32;
@@ -500,37 +483,12 @@ void    ft_image_test(t_glob *glob)
     glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 }
 
-void    ft_free(t_glob *glob)
-{
-    int i;
-
-    i = -1;
-    if (glob->map != NULL)
-    {
-        while (glob->map[++i] != 0)
-            free(glob->map[i]);
-        free(glob->map);
-    }
-    mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
-    free(glob->n_img->data);
-    free(glob->s_img->data);
-    free(glob->e_img->data);
-    free(glob->w_img->data);
-	mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
-    free(glob->mlx_ptr);
-    free(glob);
-}
-
 int main(int argc, char **argv)
 {
-    t_glob   *glob;
+    t_glob   glob[1];
 
     if (argc != 2)
         return (1);
-    glob = malloc(sizeof(t_glob));
     ft_parsing(argv[1], glob);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
@@ -538,12 +496,12 @@ int main(int argc, char **argv)
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
     ft_draw_map(glob);
     //ft_draw_player(glob, 8, 0x00FFFF00);
-    ft_image_test(glob);
+    ft_screen_test(glob);
     ft_raycasting(glob);
-    //mlx_key_hook (glob->win_ptr, &ft_deal_key, glob);
-    mlx_hook(glob->win_ptr, 2, 1L<<0, &ft_deal_key, glob);
+    mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
-    ft_free(glob);
+    mlx_destroy_display(glob->mlx_ptr);
+    free(glob->mlx_ptr);
     return (0);
 }
