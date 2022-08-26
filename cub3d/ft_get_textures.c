@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/26 16:37:04 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/26 16:50:19 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 static int  check_direction(char first, char second)
 {
+    if (first == 'C' && second == '\0')
+        return (2);
+    if (first == 'F' && second == '\0')
+        return (2);
     if (first == 'N' && second == 'O')
         return (2);
     if (first == 'S' && second == 'O')
@@ -109,22 +113,51 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
     return (0);
 }
 
+int ft_get_ceiling(t_glob *glob, char *texture, int length)
+{
+    int i;
+
+    while (texture[length] != '\0' && texture[length] != ' ')
+        length++;
+    if (glob->ceiling != -1)
+        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples ceiling
+    return (0);
+}
+
+int ft_get_floor(t_glob *glob, char *texture, int length)
+{
+    int i;
+
+    while (texture[length] != '\0' && texture[length] != ' ')
+        length++;
+    if (glob->floor != -1)
+        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples floor
+    return (0);
+}
+
 static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
 {
     int len;
     int ret;
     
+    ret = 0;
     len = j;
     // while (texture[len] && texture[len] != ' ')
         // len++;
-    if (direction == 'N')
+    if (direction == 'C')
+        glob->ceiling = ft_get_ceiling(glob, texture, 0);
+    else if (direction == 'F')
+        glob->floor = ft_get_floor(glob, texture, 0);
+    else if (direction == 'N')
         ret = ft_north_texture(glob, texture, len - j + 4);
-    if (direction == 'S')
+    else if (direction == 'S')
         ret = ft_south_texture(glob, texture, len - j + 4);
-    if (direction == 'W')
+    else if (direction == 'W')
         ret = ft_west_texture(glob, texture, len - j + 4);
-    if (direction == 'E')
+    else if (direction == 'E')
         ret = ft_east_texture(glob, texture, len - j + 4);
+    else
+        ret = 1;
     return (ret);
 }
 
@@ -138,7 +171,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i][j] && count_texture < 4)
+    while (glob->map[++i][j] && count_texture < 4 // a changer en 6 pour gerer floor/ceiling)
     {
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
