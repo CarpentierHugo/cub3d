@@ -1,0 +1,7 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/mnt/nfs/homes/achatela/cub3d/cub3d'
+gcc -I/usr/include -Imlx -c main.c -o main.o
+gcc -I/usr/include -Imlx -c ft_get_textures.c -o ft_get_textures.o
+gcc main.o ft_get_textures.o -Lmlx -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz -o cub3d
+make: Leaving directory '/mnt/nfs/homes/achatela/cub3d/cub3d'
+ 

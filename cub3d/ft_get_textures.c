@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/04 18:20:58 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/26 16:14:56 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
     return (ret);
 }
 
-void    ft_get_textures(t_glob *glob, int i, int j)
+int    ft_get_textures(t_glob *glob, int i, int j)
 {
     int     count_texture;
     char    direction;
@@ -141,9 +141,10 @@ void    ft_get_textures(t_glob *glob, int i, int j)
             if (ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
-                break; //gérer l'erreur (plusieurs texture pour la même direction)
+                return (1);
         }
         j = 0;
         direction = '\0';
     }
+    return (0);
 }
