@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/04 18:19:01 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 13:18:43 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 #define PI 3.1415926535
 #define DR PI / 180
-#define SQR_SIZE 64
+#define SQR_SIZE 256
 #define FOV 60
 #define MOV_SPD 7.5
 #define ROT_SPD 0.1

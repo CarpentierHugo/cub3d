@@ -6,7 +6,7 @@
 /*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/08 02:07:02 by hcarpent         ###   ########.fr       */
+/*   Updated: 2022/08/27 13:23:52 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,13 +239,13 @@ void    ft_draw_map(t_glob *glob)
 int get_texture_color(t_glob *glob, float tx, float ty)
 {
     if ((glob->pa <= PI / 4 && glob->pa >= 0) || (glob->pa >= 7 * PI / 4 && glob->pa <= 2 * PI))
-        return (glob->w_img->data[(int)tx + (int)ty / 8 * 32]);
+        return (glob->w_img->data[(int)tx + (int)ty * 32]);
     else if (glob->pa >= 5 * PI / 4 && glob->pa <= 7 * PI / 4)
-        return (glob->s_img->data[(int)tx + (int)ty / 8 * 32]);
+        return (glob->s_img->data[(int)tx + (int)ty * 32]);
     else if (glob->pa >= 3 * PI / 4 && glob->pa <= 5 * PI / 4)
-        return (glob->e_img->data[(int)tx + (int)ty / 8 * 32]);
+        return (glob->e_img->data[(int)tx + (int)ty * 32]);
     else if (glob->pa >= PI / 4 && glob->pa <= 3 * PI / 4)
-        return (glob->n_img->data[(int)tx + (int)ty / 8 * 32]);
+        return (glob->n_img->data[(int)tx + (int)ty * 32]);
     return (0x00000000);
 }
 
@@ -253,7 +253,6 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
 {
     int     lineh;
     int   lineo;
-    int     x;
     int     y;
     float   ty;
     float   tx;
@@ -262,7 +261,6 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     float   ty_off;
     float   ca;
     int     j;
-    int     k;
 
     ca = glob->pa - ra;
     if (ca < 0)
@@ -270,7 +268,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     if (ca > 2 * PI)
         ca -= 2 * PI;
     length *= cos(ca);
-    lineh = SQR_SIZE * SCREEN_H / length * 1.3;
+    lineh = SQR_SIZE * SCREEN_H / length / 2;
     ty_step = 32 / (float)lineh; //remplacer 32
     ty_off = 0;
     if (lineh > SCREEN_H)
@@ -283,69 +281,57 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     y = -1;
     while (++y < lineh)
     {
-        x = -1;
-        while (++x < 8)
-        {
             tx = (int)((rx + ry) / 2) % 32;  //remplacer 32
             c = get_texture_color(glob, tx, ty);
-            if ((int)ry % 64 == 0)
+            if ((int)ry % SQR_SIZE == 0)
             {  
                 if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
                 {
                     if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
-                        c = glob->n_img->data[(int)tx + (int)ty / 8 * 32];
+                        c = glob->n_img->data[(int)tx + (int)ty * 32];
                 }
                 else if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
-                    c = glob->n_img->data[(int)tx + (int)ty / 8 * 32];
+                    c = glob->n_img->data[(int)tx + (int)ty * 32];
             }   
-            if ((int)ry % 64 == 63)
+            if ((int)ry % SQR_SIZE == SQR_SIZE - 1)
             {  
                 if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
                 {
                     if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
-                        c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
+                        c = glob->s_img->data[(int)tx + (int)ty * 32];
                 }
                 else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
-                    c = glob->s_img->data[(int)tx + (int)ty / 8 * 32];
+                    c = glob->s_img->data[(int)tx + (int)ty * 32];
             }
-            if ((int)rx % 64 == 63)
+            if ((int)rx % SQR_SIZE == SQR_SIZE - 1)
             {  
                 if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
                 {
                     if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)])
-                        c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
+                        c = glob->e_img->data[(int)tx + (int)ty * 32];
                 }
                 else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
-                    c = glob->e_img->data[(int)tx + (int)ty / 8 * 32];
+                    c = glob->e_img->data[(int)tx + (int)ty * 32];
             }
-            if ((int)rx % 64 == 0)
+            if ((int)rx % SQR_SIZE == 0)
             {  
                 if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
                 {
                     if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)])
-                        c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
+                        c = glob->w_img->data[(int)tx + (int)ty * 32];
                 }
                 else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
-                    c = glob->w_img->data[(int)tx + (int)ty / 8 * 32];
+                    c = glob->w_img->data[(int)tx + (int)ty * 32];
             }
-            data[0][(int)(((i * 8 + x) + ((y + (int)lineo) * (SCREEN_W))))] = c;
+            data[0][(int)(((i) + ((y + (int)lineo) * (SCREEN_W))))] = c;
             ty += ty_step;
-        }
     }
     j = -1;
     while (++j < lineo)
-    {
-        k = -1;
-        while (++k < 8)
-            data[0][(int)((i * 8 + k) + (j * (SCREEN_W)))] = 0x00FFFFFF;
-    }
+            data[0][(int)((i) + (j * (SCREEN_W)))] = 0x00FFFFFF;
     j = lineo + lineh - 1;
     while (++j < SCREEN_H)
-    {
-        k = -1;
-        while (++k < 8)
-            data[0][(int)((i * 8 + k) + (j * (SCREEN_W)))] = 0x00CDCDCD;
-    }
+        data[0][(int)((i) + (j * (SCREEN_W)))] = 0x00CDCDCD;
 }
 
 void    ft_move(t_glob *glob, int key)
@@ -395,7 +381,7 @@ int ft_raytesting(t_glob glob, int key)
     ft_move(&glob, key);
     ra = glob.pa - (PI / 180) * (FOV / 2);
     i = -1;
-    while (++i < FOV)
+    while (++i < FOV * 3 * 8)
     {
         x = glob.px;
         y = glob.py;
@@ -408,7 +394,7 @@ int ft_raytesting(t_glob glob, int key)
         }
         if (length <= 1)
             return (1);
-        ra += DR;
+        ra += (DR / 3 / 8);
     }
     return (0);
 }
@@ -427,7 +413,7 @@ void    ft_raycasting(t_glob *glob)
     data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
     i = -1;
-    while (++i < FOV * 3)
+    while (++i < FOV * 3 * 8)
     {
         rx = glob->px;
         ry = glob->py;
@@ -439,7 +425,7 @@ void    ft_raycasting(t_glob *glob)
             length++;
         }
         ft_modelisation(glob, length, i, rx, ry, ra, &data);
-        ra += (DR / 3);
+        ra += (DR / 3 / 8);
     }
     mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
     mlx_destroy_image(glob->mlx_ptr, image);

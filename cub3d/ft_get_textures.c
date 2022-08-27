@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hcarpent <hcarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/26 16:50:19 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 13:00:37 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i][j] && count_texture < 4 // a changer en 6 pour gerer floor/ceiling)
+    while (glob->map[++i][j] && count_texture < 4) // a changer en 6 pour gerer floor/ceiling)
     {
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
