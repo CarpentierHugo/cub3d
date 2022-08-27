@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/26 16:13:41 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 14:57:48 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,15 @@ typedef struct  s_glob
     t_img   s_img[1];
     t_img   e_img[1];
     t_img   w_img[1];
-    int     floor;
-    int     ceiling;
+    long long int     floor;
+    long long int     ceiling;
     float   px;
     float   py;
     float   pa;
 }   t_glob;
 
 int    ft_get_textures(t_glob *glob, int i, int j);
+char    **ft_split_modif(char *str, char c);
+long long int	ft_atoi(const char *nptr);
 
 #endif
