@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/27 16:50:53 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 19:39:31 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         j = 0;
         direction = '\0';
     }
+    /* renvoyer le bon map begin*/
     glob->map_begin = i;
     return (0);
 }

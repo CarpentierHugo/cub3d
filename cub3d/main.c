@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/27 18:30:54 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 20:35:10 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void    ft_free_map(t_glob *glob)
     int i;
 
     i = 0;
-    while (glob->map[i])
+    (void)glob;
+    (void)i;
+    /*while (glob->map[i])
         free(glob->map[i++]);
-    free(glob->map);
+    free(glob->map);*/
 }
 
 int ft_exit(t_glob *glob)
@@ -219,6 +221,7 @@ void    ft_draw_map(t_glob *glob)
                 //ft_draw_square(glob, x, y, 0x00CDCDCD);
                 if (glob->map[y][x] != '0' && glob->map[y][x] != ' ')
                 {
+                    printf("x = %d y = %d\n",x , y);
                     glob->px = x * SQR_SIZE + SQR_SIZE / 2;
                     glob->py = y * SQR_SIZE + SQR_SIZE / 2;
                     if (glob->map[y][x] == 'N')
@@ -270,7 +273,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     if (ca > 2 * PI)
         ca -= 2 * PI;
     length *= cos(ca);
-    lineh = SQR_SIZE * SCREEN_H / length * 1.3;
+    lineh = SQR_SIZE * SCREEN_H / length;
     ty_step = 32 / (float)lineh; //remplacer 32
     ty_off = 0;
     if (lineh > SCREEN_H)
@@ -333,7 +336,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
             ty += ty_step;
         }
     }
-  /*  j = -1;
+    j = -1;
     while (++j < lineo)
     {
         k = -1;
@@ -346,38 +349,51 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
         k = -1;
         while (++k < 1)
             data[0][(int)((i) + (j * (SCREEN_W)))] = glob->floor;
-    }*/
+    }
 }
 
 void    ft_move(t_glob *glob, int key)
 {
     if (key == Z)
     {
-        glob->px += cos(glob->pa) * MOV_SPD;
-        glob->py += sin(glob->pa) * MOV_SPD;
+        //printf("BBBBBBBBBBB: %c", glob->map[11][26]);
+        if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        {
+            glob->px += cos(glob->pa) * MOV_SPD;
+            glob->py += sin(glob->pa) * MOV_SPD;
+        }
     }
-    if (key == Q)
+    else if (key == Q)
     {
-        glob->px += sin(glob->pa) * MOV_SPD;
-        glob->py -= cos(glob->pa) * MOV_SPD;
+        if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        {
+            glob->px += sin(glob->pa) * MOV_SPD;
+            glob->py -= cos(glob->pa) * MOV_SPD;
+        }
     }
-    if (key == S)
+    else if (key == S)
     {
-        glob->px -= cos(glob->pa) * MOV_SPD;
-        glob->py -= sin(glob->pa) * MOV_SPD;
+        if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        {
+            glob->px -= cos(glob->pa) * MOV_SPD;
+            glob->py -= sin(glob->pa) * MOV_SPD;
+        }
     }
-    if (key == D)
+    else if (key == D)
     {
-        glob->px -= sin(glob->pa) * MOV_SPD;
-        glob->py += cos(glob->pa) * MOV_SPD;
+        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        {
+            glob->px -= sin(glob->pa) * MOV_SPD;
+            glob->py += cos(glob->pa) * MOV_SPD;
+        }
     }
-    if (key == L_ARROW)
+    else if (key == L_ARROW)
     {
         glob->pa -= ROT_SPD;
         if (glob->pa < 0)
             glob->pa += 2 * PI;
     }
-    if (key == R_ARROW)
+    else if (key == R_ARROW)
     {
         glob->pa += ROT_SPD;
         if (glob->pa > 2 * PI)
@@ -394,10 +410,11 @@ int ft_raytesting(t_glob glob, int key)
     float   y;
     static int     dz = 0;
 
-    ft_move(&glob, key);
-    ra = glob.pa - (PI / 180) * (FOV / 2);
+    
+   // ft_move(&glob, key);
+    /*ra = glob.pa - (PI / 180) * (FOV / 2);
     i = -1;
-    while (++i < FOV)
+    while (++i < SCREEN_W)
     {
         x = glob.px;
         y = glob.py;
@@ -410,8 +427,8 @@ int ft_raytesting(t_glob glob, int key)
         }
         if (length <= 1)
             return (1);
-        ra += DR;
-    }
+        ra += (DR * FOV / SCREEN_W);
+    }*/
     return (0);
 }
 
@@ -422,15 +439,11 @@ void    ft_raycasting(t_glob *glob)
     float   ra;
     float    length;
     int     i;
-    void    *image;
-    int     *data;
 
     i = 0;
-    image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
-    data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
     i = -1;
-    while (++i < FOV * 3 * 8)
+    while (++i < SCREEN_W)
     {
         rx = glob->px;
         ry = glob->py;
@@ -442,24 +455,23 @@ void    ft_raycasting(t_glob *glob)
             length++;
         }
         if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
-            ft_modelisation(glob, length, i, rx, ry, ra, &data, 0);
+            ft_modelisation(glob, length, i, rx, ry, ra, &glob->data, 0);
         else
-            ft_modelisation(glob, length, i, rx, ry, ra, &data, 1);
-        ra += (DR / 3 / 8);
+            ft_modelisation(glob, length, i, rx, ry, ra, &glob->data, 1);
+        ra += (DR * FOV / SCREEN_W);
     }
-    i = 0;
+    /*i = 0;
     while (i++ < SCREEN_H * SCREEN_W)
     {
-        if (data[i] == 0)
+        if (glob->data[i] == 0)
         {
             if (i < (SCREEN_H * SCREEN_W) / 2)
-                data[i] = glob->ceiling;
+                glob->data[i] = glob->ceiling;
             else
-                data[i] = glob->floor;
+                glob->data[i] = glob->floor;
         }
-    }
-    mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
-    mlx_destroy_image(glob->mlx_ptr, image);
+    }*/
+    mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
 }
 
 int ft_deal_key(int key, void *param)
@@ -469,9 +481,9 @@ int ft_deal_key(int key, void *param)
     glob = (t_glob *)param;
     if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
+        //if (!ft_raytesting(*glob, key))
         //ft_draw_player(glob, 8, 0x00CDCDCD);
-       // if (!ft_raytesting(*glob, key))
-            ft_move(glob, key);
+        ft_move(glob, key);
         //ft_draw_player(glob, 8, 0x00FFFF00);
         ft_raycasting(glob);
     }
@@ -520,6 +532,7 @@ void    ft_screen_test(t_glob *glob)
 int main(int argc, char **argv)
 {
     t_glob   glob[1];
+    void     *image;
 
     if (argc != 2)
         return (1);
@@ -532,6 +545,8 @@ int main(int argc, char **argv)
         return (1);
     }
     printf("var begin %d\n", glob->map_begin);
+    glob->free_map = glob->map;
+    glob->map += glob->map_begin;
    // ft_verif_map(glob->map + glob->map_begin);
     if (glob->s_img->path_texture == NULL)
         printf("Faut gérer quand y a trop de texture SUU\n");
@@ -540,13 +555,17 @@ int main(int argc, char **argv)
 		return (1);
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
     ft_draw_map(glob);
-    //ft_draw_player(glob, 8, 0x00FFFF00);
     ft_screen_test(glob);
+    glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
+    glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
+    //ft_draw_player(glob, 8, 0x00FFFF00);
     ft_raycasting(glob);
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->image);
+    //free(image);
     return (0);
 }

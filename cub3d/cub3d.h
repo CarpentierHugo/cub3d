@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/27 18:29:54 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 20:19:01 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 #define FOV 60
 #define MOV_SPD 15
 #define ROT_SPD 0.200001
-#define SCREEN_H 1080 / 1.33333333333
-#define SCREEN_W 1920 / 1.33333333333
+#define SCREEN_H 800
+#define SCREEN_W 1200
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -63,6 +63,9 @@ typedef struct  s_img
 typedef struct  s_glob
 {
     char    **map;
+    int     *data;
+    void    *image;
+    char    **free_map;
     void	*mlx_ptr;
 	void	*win_ptr;
     t_img   n_img[1];
