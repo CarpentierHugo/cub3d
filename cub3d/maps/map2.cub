@@ -1,13 +1,13 @@
 WE          textures/netherrack.xpm
-NO    textures/mossy_cobblestone.xpm
+F 122,93,200
+NO             textures/mossy_cobblestone.xpm
+C 99,98,0
 SO                       textures/cobblestone.xpm
-EA            textures/cobbled_deepslate.xpm         
-F 222,100,0,
-
+EA            textures/cobbled_deepslate.xpm
 11111111111111
-10000000001101
-1S110000011101
-10010000000001
+100000000011011
+1011000000000N1
+100100000000011
 11111111101101
 10000000001101
 11111111111111

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/27 14:57:48 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 18:29:54 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 #define DR PI / 180
 #define SQR_SIZE 64
 #define FOV 60
-#define MOV_SPD 7.5
-#define ROT_SPD 0.1
+#define MOV_SPD 15
+#define ROT_SPD 0.200001
 #define SCREEN_H 1080 / 1.33333333333
 #define SCREEN_W 1920 / 1.33333333333
 
@@ -69,6 +69,7 @@ typedef struct  s_glob
     t_img   s_img[1];
     t_img   e_img[1];
     t_img   w_img[1];
+    int     map_begin;
     long long int     floor;
     long long int     ceiling;
     float   px;

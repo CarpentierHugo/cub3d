@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/27 14:51:20 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 16:50:53 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,14 +126,25 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
 int ft_get_ceiling(t_glob *glob, char *texture, int length)
 {
     int i;
+    char **number;
+    /*vérifier que nombre < 255, pas de négatifs, que 3 nombres, rien d'autre sur la ligne*/
 
-    /* premier nombre * 65536, second nombre * 256 et dernier nombre * 1*/
-    
-    while (texture[length] != '\0' && texture[length] != ' ')
-        length++;
     if (glob->ceiling != -1)
-        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples ceiling
-    return (0);
+        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples floor
+    number = ft_split_modif(texture, ',');
+    i = 0;
+    while (number[i])
+    {
+        if (ft_strlen(number[i]) > 3)
+            printf("Wrong number floor\n");
+        i++;
+        //break ou return si un nombre est pas dans le bon format
+    }
+    glob->ceiling = 0;
+    glob->ceiling += ft_atoi(number[0]) * 65536;
+    glob->ceiling += ft_atoi(number[1]) * 256;
+    glob->ceiling += ft_atoi(number[2]);
+    return (glob->ceiling);
 }
 
 int ft_get_floor(t_glob *glob, char *texture, int length)
@@ -157,8 +168,7 @@ int ft_get_floor(t_glob *glob, char *texture, int length)
     glob->floor += ft_atoi(number[0]) * 65536;
     glob->floor += ft_atoi(number[1]) * 256;
     glob->floor += ft_atoi(number[2]);
-    printf("%lld\n", glob->floor);
-    return (0);
+    return (glob->floor);
 }
 
 static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
@@ -193,11 +203,12 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     char    direction = '\0';
 
     count_texture = 0;
+    glob->map_begin = -1;
     glob->n_img->path_texture = NULL;
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i][j] && count_texture < 5) // a changer en 6 pour gerer floor/ceiling)
+    while (glob->map[++i][j] && count_texture < 6) // a changer en 6 pour gerer floor/ceiling)
     {
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
@@ -209,7 +220,6 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             j++;
         if (glob->map[i][j])
         {
-             printf("%c\n", direction);
             if (direction =! '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
@@ -218,5 +228,6 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         j = 0;
         direction = '\0';
     }
+    glob->map_begin = i;
     return (0);
 }

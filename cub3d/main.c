@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/27 15:12:43 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/27 18:30:54 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ int ft_count_words(char *str, char c)
     nbword = 0;
     while (*str)
     {
-        while (*str == c)
+        if (*str == c)
             str++;
         while (*str != c && *str)
-            str++;
-        while (*str == c)
             str++;
         nbword++;
     }
@@ -63,12 +61,12 @@ char    **ft_split_modif(char *str, char c)
     tab = malloc(sizeof(char *) * (nbword + 1));
     if (!tab)
         return (NULL);
-    tab[nbword] = NULL;
+    tab[nbword] = 0;
     i = -1;
     while (++i < nbword)
     {
         j = 0;
-        while (*str == c)
+        if (*str == c)
             str++;
         while (*str != c && *str)
         {
@@ -87,7 +85,6 @@ char    **ft_split_modif(char *str, char c)
             str++;
         }
     }
-    tab[i] = 0;
     return (tab);
 }
 
@@ -103,7 +100,7 @@ void    ft_verif_map(char **map)
     iszero = 0;
     ispos = 0;
     y = -1;
-/*    while (map[++y])
+    while (map[++y])
     {
         x = -1;
         while (map[y][++x])
@@ -118,17 +115,17 @@ void    ft_verif_map(char **map)
                 exit(1);
             if (ispos > 1)
                 exit(1);
-            if (map[y][x] != '1')
+            if (map[y][x] != '1' && map[y][x] != ' ')
             {
                 if (!y || !x)
-                    exit(1);
+                     exit(1);
                 if (map[y - 1][x] == ' ' || map[y - 1][x + 1] == ' ' || map[y - 1][x + 1] == 0 || map[y][x + 1] == ' ' || map[y][x + 1] == 0 || map[y + 1][x + 1] == ' ' || map[y + 1][x + 1] == 0 || map[y + 1][x] == ' ' || map[y + 1][x] == 0 || map[y + 1][x - 1]  == ' ' || map[y + 1][x - 1]  == 0 || map[y][x - 1] == ' ' || map[y - 1][x - 1] == ' ')
-                    exit(1);
+                     exit(1);
             }
         }
     }
     if (!isone || !iszero || !ispos)
-        exit(1);*/
+                exit(1);
 }
 
 void    ft_parsing(char *mapfile, t_glob *glob)
@@ -162,8 +159,9 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     read(fd, mapstr, size);
     close(fd);
     glob->map = ft_split_modif(mapstr, '\n');
+    for (int i = 0; glob->map[i]; i++)
+        printf("%s\n", glob->map[i]);
     free(mapstr);
-    ft_verif_map(glob->map);
 }
 
 void    ft_draw_square(t_glob *glob, int posx, int posy, int color)
@@ -219,7 +217,7 @@ void    ft_draw_map(t_glob *glob)
             else
             {
                 //ft_draw_square(glob, x, y, 0x00CDCDCD);
-                if (glob->map[y][x] != '0')
+                if (glob->map[y][x] != '0' && glob->map[y][x] != ' ')
                 {
                     glob->px = x * SQR_SIZE + SQR_SIZE / 2;
                     glob->py = y * SQR_SIZE + SQR_SIZE / 2;
@@ -250,7 +248,7 @@ int get_texture_color(t_glob *glob, float tx, float ty)
     return (0x00000000);
 }
 
-void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, float ra, int **data)
+void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data, int blabla)
 {
     int     lineh;
     int   lineo;
@@ -264,6 +262,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     float   ca;
     int     j;
     int     k;
+    static int m = 0;
 
     ca = glob->pa - ra;
     if (ca < 0)
@@ -282,6 +281,7 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
     lineo = SCREEN_H / 2 - (lineh / 2);
     ty = ty_off * ty_step;
     y = -1;
+    (void)blabla;
     while (++y < lineh)
     {
         x = -1;
@@ -333,20 +333,20 @@ void    ft_modelisation(t_glob *glob, int length, int i, float rx, float ry, flo
             ty += ty_step;
         }
     }
-    j = -1;
+  /*  j = -1;
     while (++j < lineo)
     {
         k = -1;
         while (++k < 1)
-            data[0][(int)((i * 1 + k) + (j * (SCREEN_W)))] = 0x00FFFFFF;
+            data[0][(int)((i) + (j * (SCREEN_W)))] = glob->ceiling; // remplacer par glob->ceiling
     }
     j = lineo + lineh - 1;
     while (++j < SCREEN_H)
     {
         k = -1;
         while (++k < 1)
-            data[0][(int)((i * 1 + k) + (j * (SCREEN_W)))] = 0x00CDCDCD;
-    }
+            data[0][(int)((i) + (j * (SCREEN_W)))] = glob->floor;
+    }*/
 }
 
 void    ft_move(t_glob *glob, int key)
@@ -388,20 +388,21 @@ void    ft_move(t_glob *glob, int key)
 int ft_raytesting(t_glob glob, int key)
 {
     float   ra;
-    int     length;
+    float     length;
     int     i;
     float   x;
     float   y;
+    static int     dz = 0;
 
     ft_move(&glob, key);
     ra = glob.pa - (PI / 180) * (FOV / 2);
     i = -1;
-    while (++i < FOV * 3 * 8)
+    while (++i < FOV)
     {
         x = glob.px;
         y = glob.py;
         length = 0;
-        while (glob.map[(int)(y / SQR_SIZE)][(int)(x / SQR_SIZE)] != '1')
+        while (glob.map[(int)(y / SQR_SIZE)][(int)(x / SQR_SIZE)] != '1'  && glob.map[(int)(y / SQR_SIZE)][(int)(x / SQR_SIZE)] != '\0')
         {
             x += cos(ra);
             y += sin(ra);
@@ -409,7 +410,7 @@ int ft_raytesting(t_glob glob, int key)
         }
         if (length <= 1)
             return (1);
-        ra += DR / 3 / 8;
+        ra += DR;
     }
     return (0);
 }
@@ -419,11 +420,12 @@ void    ft_raycasting(t_glob *glob)
     float   rx;
     float   ry;
     float   ra;
-    int     length;
+    float    length;
     int     i;
     void    *image;
     int     *data;
 
+    i = 0;
     image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     data = (int *)mlx_get_data_addr(image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     ra = glob->pa - DR * (FOV / 2);
@@ -433,14 +435,28 @@ void    ft_raycasting(t_glob *glob)
         rx = glob->px;
         ry = glob->py;
         length = 0;
-        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0')
         {
             rx += cos(ra);
             ry += sin(ra);
             length++;
         }
-        ft_modelisation(glob, length, i, rx, ry, ra, &data);
+        if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
+            ft_modelisation(glob, length, i, rx, ry, ra, &data, 0);
+        else
+            ft_modelisation(glob, length, i, rx, ry, ra, &data, 1);
         ra += (DR / 3 / 8);
+    }
+    i = 0;
+    while (i++ < SCREEN_H * SCREEN_W)
+    {
+        if (data[i] == 0)
+        {
+            if (i < (SCREEN_H * SCREEN_W) / 2)
+                data[i] = glob->ceiling;
+            else
+                data[i] = glob->floor;
+        }
     }
     mlx_put_image_to_window (glob->mlx_ptr, glob->win_ptr, image, 0, 0);
     mlx_destroy_image(glob->mlx_ptr, image);
@@ -454,7 +470,7 @@ int ft_deal_key(int key, void *param)
     if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
         //ft_draw_player(glob, 8, 0x00CDCDCD);
-        if (!ft_raytesting(*glob, key))
+       // if (!ft_raytesting(*glob, key))
             ft_move(glob, key);
         //ft_draw_player(glob, 8, 0x00FFFF00);
         ft_raycasting(glob);
@@ -515,6 +531,8 @@ int main(int argc, char **argv)
         printf("Error (erreur a developper)\n");
         return (1);
     }
+    printf("var begin %d\n", glob->map_begin);
+   // ft_verif_map(glob->map + glob->map_begin);
     if (glob->s_img->path_texture == NULL)
         printf("Faut gérer quand y a trop de texture SUU\n");
     glob->mlx_ptr = mlx_init();
