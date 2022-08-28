@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/28 17:07:17 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:38:24 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,18 @@ void    ft_free_map(t_glob *glob)
         free(glob->w_img->path_texture);
 }
 
+int ft_str_is_beginning(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i] == ' ')
+        i++;
+    if (str[i] == '1')
+        return (1);
+    return (0);
+}
+
 int    ft_get_textures(t_glob *glob, int i, int j)
 {
     int     count_texture;
@@ -302,8 +314,10 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i][j] && count_texture < 6) // si count_texture == 6 mais qu'il reste des lignes de textures/floor/ceiling à parser il faut pas arrêter la boucle en fait
+    while (glob->map[++i] != 0) // si count_texture == 6 mais qu'il reste des lignes de textures/floor/ceiling à parser il faut pas arrêter la boucle
     {
+        if (ft_str_is_beginning(glob->map[i]) == 1)
+            break;
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
         if (glob->map[i][j] && check_direction(glob->map[i][j], glob->map[i][j + 1]) != 0)
@@ -317,17 +331,20 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             if (direction != '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
-                return (ft_free_map(glob), 1);
+                return (printf("Error\nToo many elements before map\n"), ft_free_map(glob), 1);
         }
         j = 0;
         direction = '\0';
     }
+    if (count_texture != 6)
+        return (printf("Error\nToo few elements before map\n"), ft_free_map(glob), 1);
     while (glob->map[i] != 0)
     {
         if (ft_map_beginning(glob->map[i]) == 1)
             break ;
         i++;
     }
+    printf("glob map = %s\n", glob->map[i]);
     if (glob->map[i] == 0)
     {
         printf("Error\nThere is no map is the file\n");
