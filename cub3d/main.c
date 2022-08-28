@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 16:08:36 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:32:03 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,6 @@ void    ft_draw_map(t_glob *glob)
                 //ft_draw_square(glob, x, y, 0x00CDCDCD);
                 if (glob->map[y][x] != '0' && glob->map[y][x] != ' ')
                 {
-                    printf("x = %d y = %d\n",x , y);
                     glob->px = x * SQR_SIZE + SQR_SIZE / 2;
                     glob->py = y * SQR_SIZE + SQR_SIZE / 2;
                     if (glob->map[y][x] == 'N')
@@ -338,7 +337,6 @@ void    ft_move(t_glob *glob, int key)
 {
     if (key == Z)
     {
-        //printf("BBBBBBBBBBB: %c", glob->map[11][26]);
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += cos(glob->pa) * MOV_SPD;
@@ -477,11 +475,7 @@ int main(int argc, char **argv)
     glob->ceiling = -1;
     glob->floor = -1;
     if (ft_get_textures(glob, -1, 0) != 0)
-    {
-        printf("Error (erreur a developper)\n");
         return (1);
-    }
-    printf("var begin %d\n", glob->map_begin);
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
    // ft_verif_map(glob->map + glob->map_begin);
