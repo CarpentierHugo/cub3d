@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/28 15:29:01 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:01:07 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,32 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
     return (0);
 }
 
+int ft_rgb_error(char **number, int i)
+{
+    if (number[0] == 0 || number[1] == 0 || number[2] == 0)
+    {
+        printf("RGB Format error (Too few arguments)\n");
+        return (1);
+    }
+    if (number[3] != 0)
+    {
+        printf("RGB Format error (Too many arguments)\n");
+        return (1);
+    }
+    if (((number[0][0] != '-' && ft_strlen(number[0]) > 3) || (number[1][0] != '-' && ft_strlen(number[1]) > 3) || (number[2][0] != '-' && ft_strlen(number[2]) > 3))
+        || (ft_strlen(number[0]) > 4) || ft_strlen(number[1]) > 4 || ft_strlen(number[2]) > 4) // strlen custom qui s'arrête aux espaces? ? ? ?
+    {
+        printf("RGB Value contain more than 3 numbers\n");
+        return (1);
+    }
+    if (ft_atoi(number[0]) < 0 || ft_atoi(number[1]) < 0 || ft_atoi(number[2]) < 0)
+    {
+        printf("RGB Value is negative\n");
+        return (1);
+    }
+    return (0);
+}
+
 int ft_get_ceiling(t_glob *glob, char *texture, int length)
 {
     int i;
@@ -130,7 +156,7 @@ int ft_get_ceiling(t_glob *glob, char *texture, int length)
     /*vérifier que nombre < 255, pas de négatifs, que 3 nombres, rien d'autre sur la ligne*/
 
     if (glob->ceiling != -1)
-        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples floor
+        return (1);
     number = ft_split_modif(texture, ',');
     i = 0;
     while (number[i])
@@ -144,7 +170,7 @@ int ft_get_ceiling(t_glob *glob, char *texture, int length)
     glob->ceiling += ft_atoi(number[0]) * 65536;
     glob->ceiling += ft_atoi(number[1]) * 256;
     glob->ceiling += ft_atoi(number[2]);
-    return (glob->ceiling);
+    return (0);
 }
 
 int ft_get_floor(t_glob *glob, char *texture, int length)
@@ -154,8 +180,10 @@ int ft_get_floor(t_glob *glob, char *texture, int length)
     /*vérifier que nombre < 255, pas de négatifs, que 3 nombres, rien d'autre sur la ligne*/
 
     if (glob->floor != -1)
-        return (1); // a mieux gerer mais pour l'instant on gere pas les multiples floor
+        return (1);
     number = ft_split_modif(texture, ',');
+    if (ft_rgb_error(number, 0) == 1)
+        return (1); // peut-être return 2 pour gérer les erreurs
     i = 0;
     while (number[i])
     {
@@ -168,7 +196,7 @@ int ft_get_floor(t_glob *glob, char *texture, int length)
     glob->floor += ft_atoi(number[0]) * 65536;
     glob->floor += ft_atoi(number[1]) * 256;
     glob->floor += ft_atoi(number[2]);
-    return (glob->floor);
+    return (0);
 }
 
 static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
@@ -181,9 +209,9 @@ static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
     // while (texture[len] && texture[len] != ' ')
         // len++;
     if (direction == 'C')
-        glob->ceiling = ft_get_ceiling(glob, texture, 0);
+        ret = ft_get_ceiling(glob, texture, 0);
     else if (direction == 'F')
-        glob->floor = ft_get_floor(glob, texture, 0);
+        ret = ft_get_floor(glob, texture, 0);
     else if (direction == 'N')
         ret = ft_north_texture(glob, texture, len - j + 4);
     else if (direction == 'S')
@@ -236,10 +264,13 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             j++;
         if (glob->map[i][j])
         {
-            if (direction =! '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
+            if (direction != '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
+            {
+                printf("get texture 1 returned\n");
                 return (1);
+            }
         }
         j = 0;
         direction = '\0';
@@ -251,9 +282,11 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         i++;
     }
     printf("map begin string: \"%s\"\n", glob->map[i]);
-    /* if glob->map[i] == 0 renvoyer genre 2 et dire que map = inexistante
-        if (glob->map[i] == 0)
-            return (2);*/
+    if (glob->map[i] == 0)
+    {
+        printf("Pas de map\n");
+        return (2);
+    }
     /* renvoyer le bon map begin*/
     glob->map_begin = i;
     return (0);

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 14:50:55 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:05:26 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -478,7 +478,7 @@ int main(int argc, char **argv)
     ft_parsing(argv[1], glob);
     glob->ceiling = -1;
     glob->floor = -1;
-    if (ft_get_textures(glob, -1, 0) == 1)
+    if (ft_get_textures(glob, -1, 0) != 0)
     {
         printf("Error (erreur a developper)\n");
         return (1);
