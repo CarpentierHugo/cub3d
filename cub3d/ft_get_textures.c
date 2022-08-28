@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/27 19:39:31 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 15:29:01 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,22 @@ static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
     return (ret);
 }
 
+int     ft_map_beginning(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '1' || str[i] == '0' || str[i] == 'N'
+            || str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
+            return (1);
+        else
+            i++;
+    }
+    return (0);
+}
+
 int    ft_get_textures(t_glob *glob, int i, int j)
 {
     int     count_texture;
@@ -228,6 +244,16 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         j = 0;
         direction = '\0';
     }
+    while (glob->map[i] != 0)
+    {
+        if (ft_map_beginning(glob->map[i]) == 1)
+            break ;
+        i++;
+    }
+    printf("map begin string: \"%s\"\n", glob->map[i]);
+    /* if glob->map[i] == 0 renvoyer genre 2 et dire que map = inexistante
+        if (glob->map[i] == 0)
+            return (2);*/
     /* renvoyer le bon map begin*/
     glob->map_begin = i;
     return (0);

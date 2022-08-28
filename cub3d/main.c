@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 14:50:55 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 15:29:41 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,6 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     read(fd, mapstr, size);
     close(fd);
     glob->map = ft_split_modif(mapstr, '\n');
-    for (int i = 0; glob->map[i]; i++)
-        printf("%s\n", glob->map[i]);
     free(mapstr);
 }
 
@@ -505,10 +503,7 @@ int main(int argc, char **argv)
     mlx_destroy_image(glob->mlx_ptr, glob->image);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
-<<<<<<< HEAD
     //mlx_destroy_image(glob->mlx_ptr, glob->image);
-=======
->>>>>>> c7902605fd0cecd63957937cbfee799a71cb9a03
     //free(image);
     return (0);
 }
