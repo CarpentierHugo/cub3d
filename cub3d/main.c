@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/27 20:35:10 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 14:50:55 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -502,9 +502,13 @@ int main(int argc, char **argv)
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
+    mlx_destroy_image(glob->mlx_ptr, glob->image);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
+<<<<<<< HEAD
     //mlx_destroy_image(glob->mlx_ptr, glob->image);
+=======
+>>>>>>> c7902605fd0cecd63957937cbfee799a71cb9a03
     //free(image);
     return (0);
 }
