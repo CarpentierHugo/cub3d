@@ -4,7 +4,7 @@ OBJ	=		$(SRC:.c=.o)
 
 CFLAGS =	-Wall -Werror -Wextra
 
-NAME =		cub3d
+NAME =		cub3D
 
 CC =		gcc
 RM =		rm -f

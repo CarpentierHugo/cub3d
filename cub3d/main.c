@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 17:03:15 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:13:14 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -463,10 +463,14 @@ void    ft_free(t_glob *glob)
         i++;
     }
     free(glob->free_map);
-    free(glob->n_img->path_texture);
-    free(glob->s_img->path_texture);
-    free(glob->w_img->path_texture);
-    free(glob->e_img->path_texture);
+    if (glob->n_img->path_texture != NULL)
+        free(glob->n_img->path_texture);
+    if (glob->s_img->path_texture != NULL)
+        free(glob->s_img->path_texture);
+    if (glob->e_img->path_texture != NULL)
+        free(glob->e_img->path_texture);
+    if (glob->w_img->path_texture != NULL)
+        free(glob->w_img->path_texture);
 }
 
 int main(int argc, char **argv)
@@ -486,11 +490,9 @@ int main(int argc, char **argv)
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
    // ft_verif_map(glob->map + glob->map_begin);
-    if (glob->s_img->path_texture == NULL)
-        printf("Faut gérer quand y a trop de texture SUU\n");
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
-		return (1);
+		return (ft_free(glob), 1);
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
     ft_draw_map(glob);
     ft_screen_test(glob);
