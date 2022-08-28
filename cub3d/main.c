@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 16:05:26 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:08:36 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,6 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     read(fd, mapstr, size);
     close(fd);
     glob->map = ft_split_modif(mapstr, '\n');
-    for (int i = 0; glob->map[i]; i++)
-        printf("%s\n", glob->map[i]);
     free(mapstr);
 }
 
