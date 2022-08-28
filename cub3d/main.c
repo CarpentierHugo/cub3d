@@ -6,32 +6,19 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 16:54:56 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:03:15 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void    ft_free_map(t_glob *glob)
-{
-    int i;
-
-    i = 0;
-    (void)glob;
-    (void)i;
-    /*while (glob->map[i])
-        free(glob->map[i++]);
-    free(glob->map);*/
-}
-
 int ft_exit(t_glob *glob)
 {
-    ft_free_map(glob);
     mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
-    mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
+   // mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
 	mlx_loop_end(glob->mlx_ptr);
     return (0);
 }
@@ -514,11 +501,10 @@ int main(int argc, char **argv)
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
+    mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->image);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
     ft_free(glob);
-    //mlx_destroy_image(glob->mlx_ptr, glob->image);
-    //free(image);
     return (0);
 }

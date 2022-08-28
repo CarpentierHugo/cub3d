@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/28 16:47:35 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:07:17 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,27 @@ int     ft_map_beginning(char *str)
     return (0);
 }
 
+void    ft_free_map(t_glob *glob)
+{
+    int i;
+
+    i = 0;
+    while (glob->map[i] != 0)
+    {
+        free(glob->map[i]);
+        i++;
+    }
+    free(glob->map);
+    if (glob->n_img->path_texture != NULL)
+        free(glob->n_img->path_texture);
+    if (glob->s_img->path_texture != NULL)
+        free(glob->s_img->path_texture);
+    if (glob->e_img->path_texture != NULL)
+        free(glob->e_img->path_texture);
+    if (glob->w_img->path_texture != NULL)
+        free(glob->w_img->path_texture);
+}
+
 int    ft_get_textures(t_glob *glob, int i, int j)
 {
     int     count_texture;
@@ -296,7 +317,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             if (direction != '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
-                return (1);
+                return (ft_free_map(glob), 1);
         }
         j = 0;
         direction = '\0';
@@ -310,7 +331,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     if (glob->map[i] == 0)
     {
         printf("Error\nThere is no map is the file\n");
-        return (2);
+        return (ft_free_map(glob), 2);
     }
     glob->map_begin = i;
     return (0);
