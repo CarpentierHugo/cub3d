@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 16:32:03 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:54:56 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,6 +465,23 @@ void    ft_screen_test(t_glob *glob)
     glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 }
 
+void    ft_free(t_glob *glob)
+{
+    int i;
+
+    i = 0;
+    while (glob->free_map[i] != 0)
+    {
+        free(glob->free_map[i]);
+        i++;
+    }
+    free(glob->free_map);
+    free(glob->n_img->path_texture);
+    free(glob->s_img->path_texture);
+    free(glob->w_img->path_texture);
+    free(glob->e_img->path_texture);
+}
+
 int main(int argc, char **argv)
 {
     t_glob   glob[1];
@@ -475,7 +492,10 @@ int main(int argc, char **argv)
     glob->ceiling = -1;
     glob->floor = -1;
     if (ft_get_textures(glob, -1, 0) != 0)
+    {
+        printf("Error (si c'est le seul message le cas n'est pas géré)\n");
         return (1);
+    }
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
    // ft_verif_map(glob->map + glob->map_begin);
@@ -497,6 +517,7 @@ int main(int argc, char **argv)
     mlx_destroy_image(glob->mlx_ptr, glob->image);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
+    ft_free(glob);
     //mlx_destroy_image(glob->mlx_ptr, glob->image);
     //free(image);
     return (0);

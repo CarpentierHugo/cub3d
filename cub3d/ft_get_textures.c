@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/28 16:32:08 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 16:47:35 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
 
 int ft_rgb_error(char **number, int i)
 {
-    if (number[0] == 0 || number[1] == 0 || number[2] == 0)
+    if (number[0] == 0 || number[1] == 0 || number[2] == 0) // fonctionne pas quand number == NULL ou que F ou C est suivi de rien ?
     {
         printf("Error\nRGB Format error (Too few arguments)\n");
         return (1);
@@ -174,19 +174,36 @@ int ft_rgb_error(char **number, int i)
     return (0);
 }
 
+void    ft_free_number(char **number, int i)
+{
+    while (number[i] != 0)
+    {
+        free(number[i]);
+        i++;
+    }
+    free(number);
+}
+
 int ft_get_ceiling(t_glob *glob, char *texture, int length)
 {
     char **number;
 
     if (glob->ceiling != -1)
         return (1);
+    number = NULL;
     number = ft_split_modif(texture, ',');
-    if (ft_rgb_error(number, 0) == 1)
+    if (number == NULL)
         return (1);
+    if (ft_rgb_error(number, 0) == 1)
+    {
+        ft_free_number(number, 0);
+        return (1);
+    }
     glob->ceiling = 0;
     glob->ceiling += ft_atoi(number[0]) * 65536;
     glob->ceiling += ft_atoi(number[1]) * 256;
     glob->ceiling += ft_atoi(number[2]);
+    ft_free_number(number, 0);
     return (0);
 }
 
@@ -196,13 +213,20 @@ int ft_get_floor(t_glob *glob, char *texture, int length)
 
     if (glob->floor != -1)
         return (1);
+    number = NULL;
     number = ft_split_modif(texture, ',');
-    if (ft_rgb_error(number, 0) == 1)
+    if (number == NULL)
         return (1);
+    if (ft_rgb_error(number, 0) == 1)
+    {
+        ft_free_number(number, 0);
+        return (1);
+    }
     glob->floor = 0;
     glob->floor += ft_atoi(number[0]) * 65536;
     glob->floor += ft_atoi(number[1]) * 256;
     glob->floor += ft_atoi(number[2]);
+    ft_free_number(number, 0);
     return (0);
 }
 
@@ -257,7 +281,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i][j] && count_texture < 6)
+    while (glob->map[++i][j] && count_texture < 6) // si count_texture == 6 mais qu'il reste des lignes de textures/floor/ceiling à parser il faut pas arrêter la boucle en fait
     {
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
