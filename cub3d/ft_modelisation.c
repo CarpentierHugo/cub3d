@@ -12,19 +12,6 @@
 
 #include "cub3d.h"
 
-static int get_texture_color(t_glob *glob, float tx, float ty)
-{
-    if ((glob->pa <= PI / 4 && glob->pa >= 0) || (glob->pa >= 7 * PI / 4 && glob->pa <= 2 * PI))
-        return (glob->w_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= 5 * PI / 4 && glob->pa <= 7 * PI / 4)
-        return (glob->s_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= 3 * PI / 4 && glob->pa <= 5 * PI / 4)
-        return (glob->e_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= PI / 4 && glob->pa <= 3 * PI / 4)
-        return (glob->n_img->data[(int)tx + (int)ty * RES]);
-    return (0x00000000);
-}
-
 void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data)
 {
     float     lineh;
@@ -37,8 +24,9 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     float   ty_off;
     float   ca;
     int     j;
+    int     irx = (int)rx;
+    int     iry = (int)ry;
 
-    (void)get_texture_color;
     ca = glob->pa - ra;
     if (ca < 0)
         ca += 2 * PI;
@@ -58,25 +46,24 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     y = -1;
     while (++y < lineh)
     {
-            tx = (int)((rx + ry) / (SQR_SIZE / RES)) % RES;  //remplacer RES
-            //c = get_texture_color(glob, tx, ty);
+            tx = (int)((irx + iry) / (SQR_SIZE / RES)) % RES;  //remplacer RES
             j = 0;
-            if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+            if (glob->map[(int)((iry - 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
             {
                 c = glob->n_img->data[(int)tx + (int)ty * RES];
                 j++;
             }
-            if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+            if (glob->map[(int)((iry + 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
             {
                 c = glob->s_img->data[(int)tx + (int)ty * RES];
                 j++;
             }
-            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
+            if (glob->map[(int)(iry / SQR_SIZE)][(int)((irx + 1) / SQR_SIZE)] != '1')
             {
                 c = glob->e_img->data[(int)tx + (int)ty * RES];
                 j++;
             }
-            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
+            if (glob->map[(int)(iry / SQR_SIZE)][(int)((irx - 1) / SQR_SIZE)] != '1')
             {
                 c = glob->w_img->data[(int)tx + (int)ty * RES];
                 j++;
@@ -94,13 +81,13 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
             }
             else if (j == 2)
             {
-                if (&glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                if (&glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)((iry - 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
                     c = glob->n_img->data[(int)tx + (int)ty * RES];
-                else if (&glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                if (&glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)((iry + 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
                     c = glob->s_img->data[(int)tx + (int)ty * RES];
-                else if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)(iry / SQR_SIZE)][(int)((irx + 1) / SQR_SIZE)] != '1')
                     c = glob->e_img->data[(int)tx + (int)ty * RES];
-                else if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)(iry / SQR_SIZE)][(int)((irx - 1) / SQR_SIZE)] != '1')
                     c = glob->w_img->data[(int)tx + (int)ty * RES];
             }
             data[0][(int)((i + ((y + lineo) * (SCREEN_W))))] = c;
