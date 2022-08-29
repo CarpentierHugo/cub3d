@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 15:52:44 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:02:59 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,25 +222,13 @@ void    ft_draw_map(t_glob *glob)
     }
 }
 
-int get_texture_color(t_glob *glob, float tx, float ty)
-{
-    if ((glob->pa <= PI / 4 && glob->pa >= 0) || (glob->pa >= 7 * PI / 4 && glob->pa <= 2 * PI))
-        return (glob->w_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= 5 * PI / 4 && glob->pa <= 7 * PI / 4)
-        return (glob->s_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= 3 * PI / 4 && glob->pa <= 5 * PI / 4)
-        return (glob->e_img->data[(int)tx + (int)ty * RES]);
-    else if (glob->pa >= PI / 4 && glob->pa <= 3 * PI / 4)
-        return (glob->n_img->data[(int)tx + (int)ty * RES]);
-    return (0x00000000);
-}
 
 void    ft_move(t_glob *glob, int key)
 {
-   /* double x;
-    double y;
-    int decimalx;
-    int decimaly;*/
+//     double x;
+//     double y;
+//     int decimalx;
+//     int decimaly;
 
     if (key == Z)
     {
@@ -252,16 +240,17 @@ void    ft_move(t_glob *glob, int key)
         // x -= decimalx;
         // y -= decimaly;
         // printf("x decimal = %f, y deciaml = %f\n", x, y);
-        // if (x < 0.0095 && y < 0.5)
+        // if (x < 0.0095 && x > 0.0086) //&& y < 0.5)
         //     x = (int)(((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE) - 1);
-        // if (y < 0.0095 && x < 0.5)
+        // if (y < 0.0095 && y > 0.0086)//&& x < 0.5)
         //     y = (int)(((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)) - 1;
         // printf("x decimal = %f, y deciaml = %f\n", x, y);
-        //if (glob->map[(int)y][(int)x] != '1')
+     //   if (glob->map[(int)y][(int)x] != '1')
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += (int)(cos(glob->pa) * MOV_SPD);
             glob->py += (int)(sin(glob->pa) * MOV_SPD);
+            //glob->py += (sin(glob->pa) * MOV_SPD) / 2;
         }
     }
     else if (key == Q)
@@ -280,6 +269,7 @@ void    ft_move(t_glob *glob, int key)
         {
             glob->px -= (int)(cos(glob->pa) * MOV_SPD);
             glob->py -= (int)(sin(glob->pa) * MOV_SPD);
+            //glob->py -= (sin(glob->pa) * MOV_SPD) / 2;
         }
     }
     else if (key == D)
@@ -381,7 +371,7 @@ void    ft_screen(t_glob *glob)
     ft_init_img(glob);
     glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
-    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??
+    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??   
     glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
     glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr, &glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
