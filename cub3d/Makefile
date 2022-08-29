@@ -12,10 +12,10 @@ RM =		rm -f
 all: $(NAME)
 
 %.o: %.c  cub3d.h
-			$(CC) -I/usr/include -Imlx -c $< -o $@
+			$(CC) $(CFLAGS) -I/usr/include -Imlx -c $< -o $@
 
 $(NAME): $(OBJ)
-			$(CC) $(OBJ) -Lmlx -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz -o $(NAME)
+			$(CC) $(CFLAGS) $(OBJ)  -Lmlx -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz -o $(NAME)
 
 clean:
 			$(RM) $(OBJ)

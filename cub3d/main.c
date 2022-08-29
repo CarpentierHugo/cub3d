@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 17:13:14 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/28 18:48:34 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void    ft_verif_map(char **map)
         }
     }
     if (!isone || !iszero || !ispos)
-                exit(1);
+        exit(1);
 }
 
 void    ft_parsing(char *mapfile, t_glob *glob)
@@ -405,9 +405,9 @@ int ft_deal_key(int key, void *param)
     if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
         //if (!ft_raytesting(*glob, key))
-        //ft_draw_player(glob, 8, 0x00CDCDCD);
+        ft_draw_player(glob, 8, 0x00CDCDCD);
         ft_move(glob, key);
-        //ft_draw_player(glob, 8, 0x00FFFF00);
+        ft_draw_player(glob, 8, 0x00FFFF00);
         ft_raycasting(glob);
     }
     if (key == ESC)
@@ -439,7 +439,7 @@ void    ft_init_img(t_glob *glob)
     glob->e_img->e = 0;
 }
 
-void    ft_screen_test(t_glob *glob)
+void    ft_screen(t_glob *glob)
 {
     ft_init_img(glob);
     glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
@@ -489,16 +489,16 @@ int main(int argc, char **argv)
     }
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
-   // ft_verif_map(glob->map + glob->map_begin);
+    //ft_verif_map(glob->map + glob->map_begin);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (ft_free(glob), 1);
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
     ft_draw_map(glob);
-    ft_screen_test(glob);
+    ft_screen(glob);
     glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
-    //ft_draw_player(glob, 8, 0x00FFFF00);
+    ft_draw_player(glob, 8, 0x00FFFF00);
     ft_raycasting(glob);
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);

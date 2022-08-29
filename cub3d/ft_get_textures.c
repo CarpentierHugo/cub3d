@@ -6,21 +6,11 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/28 17:38:24 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 14:01:10 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static int ft_strlen(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
 
 static int ft_strlen_custom(char *str)
 {
@@ -143,7 +133,7 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
     return (0);
 }
 
-int ft_rgb_error(char **number, int i)
+int ft_rgb_error(char **number)
 {
     if (number[0] == 0 || number[1] == 0 || number[2] == 0) // fonctionne pas quand number == NULL ou que F ou C est suivi de rien ?
     {
@@ -184,7 +174,7 @@ void    ft_free_number(char **number, int i)
     free(number);
 }
 
-int ft_get_ceiling(t_glob *glob, char *texture, int length)
+int ft_get_ceiling(t_glob *glob, char *texture)
 {
     char **number;
 
@@ -194,7 +184,7 @@ int ft_get_ceiling(t_glob *glob, char *texture, int length)
     number = ft_split_modif(texture, ',');
     if (number == NULL)
         return (1);
-    if (ft_rgb_error(number, 0) == 1)
+    if (ft_rgb_error(number) == 1)
     {
         ft_free_number(number, 0);
         return (1);
@@ -207,7 +197,7 @@ int ft_get_ceiling(t_glob *glob, char *texture, int length)
     return (0);
 }
 
-int ft_get_floor(t_glob *glob, char *texture, int length)
+int ft_get_floor(t_glob *glob, char *texture)
 {
     char **number;
 
@@ -217,7 +207,7 @@ int ft_get_floor(t_glob *glob, char *texture, int length)
     number = ft_split_modif(texture, ',');
     if (number == NULL)
         return (1);
-    if (ft_rgb_error(number, 0) == 1)
+    if (ft_rgb_error(number) == 1)
     {
         ft_free_number(number, 0);
         return (1);
@@ -238,9 +228,9 @@ static int ft_path_texture(t_glob *glob, char direction, int j, char *texture)
     ret = 0;
     len = j;
     if (direction == 'C')
-        ret = ft_get_ceiling(glob, texture, 0);
+        ret = ft_get_ceiling(glob, texture);
     else if (direction == 'F')
-        ret = ft_get_floor(glob, texture, 0);
+        ret = ft_get_floor(glob, texture);
     else if (direction == 'N')
         ret = ft_north_texture(glob, texture, len - j + 4);
     else if (direction == 'S')
