@@ -84,6 +84,6 @@ typedef struct  s_glob
 int    ft_get_textures(t_glob *glob, int i, int j);
 char    **ft_split_modif(char *str, char c);
 long long int	ft_atoi(const char *nptr);
-void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float ra, int **data);
+void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data);
 
 #endif
