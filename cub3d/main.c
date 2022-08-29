@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 17:02:59 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 18:12:43 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,20 +151,6 @@ void    ft_parsing(char *mapfile, t_glob *glob)
     free(mapstr);
 }
 
-void    ft_draw_square(t_glob *glob, int posx, int posy, int color)
-{
-    int x;
-    int y;
-
-    y = -1;
-    while (++y < SQR_SIZE)
-    {
-        x = -1;
-        while (++x < SQR_SIZE)
-            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, posx * SQR_SIZE + x, posy * SQR_SIZE + y, color);
-    }
-}
-
 void    ft_draw_player(t_glob *glob, int size, int color)
 {
     int tmpy;
@@ -225,37 +211,16 @@ void    ft_draw_map(t_glob *glob)
 
 void    ft_move(t_glob *glob, int key)
 {
-//     double x;
-//     double y;
-//     int decimalx;
-//     int decimaly;
-
     if (key == Z)
     {
-         printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
-        // x = (glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE;
-        // y = (glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE;
-        // decimalx = (int)x;
-        // decimaly = (int)y;
-        // x -= decimalx;
-        // y -= decimaly;
-        // printf("x decimal = %f, y deciaml = %f\n", x, y);
-        // if (x < 0.0095 && x > 0.0086) //&& y < 0.5)
-        //     x = (int)(((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE) - 1);
-        // if (y < 0.0095 && y > 0.0086)//&& x < 0.5)
-        //     y = (int)(((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)) - 1;
-        // printf("x decimal = %f, y deciaml = %f\n", x, y);
-     //   if (glob->map[(int)y][(int)x] != '1')
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += (int)(cos(glob->pa) * MOV_SPD);
             glob->py += (int)(sin(glob->pa) * MOV_SPD);
-            //glob->py += (sin(glob->pa) * MOV_SPD) / 2;
         }
     }
     else if (key == Q)
     {
-        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += (int)(sin(glob->pa) * MOV_SPD);
@@ -264,17 +229,14 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == S)
     {
-        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px -= (int)(cos(glob->pa) * MOV_SPD);
             glob->py -= (int)(sin(glob->pa) * MOV_SPD);
-            //glob->py -= (sin(glob->pa) * MOV_SPD) / 2;
         }
     }
     else if (key == D)
     {
-        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px -= (int)(sin(glob->pa) * MOV_SPD);
@@ -336,6 +298,7 @@ int ft_deal_key(int key, void *param)
             ft_move(glob, key);
         //ft_draw_player(glob, 8, 0x00FFFF00);
         ft_raycasting(glob);
+        ft_minimap(glob);
     }
     else if (key == ESC)
         ft_exit(glob);

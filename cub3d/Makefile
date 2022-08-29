@@ -1,4 +1,4 @@
-SRC	=		main.c ft_get_textures.c ft_atoi.c ft_modelisation.c
+SRC	=		main.c ft_get_textures.c ft_atoi.c ft_modelisation.c ft_minimap.c
 
 OBJ	=		$(SRC:.c=.o)
 
