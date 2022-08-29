@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 14:50:59 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 15:52:58 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ typedef struct  s_glob
 int    ft_get_textures(t_glob *glob, int i, int j);
 char    **ft_split_modif(char *str, char c);
 long long int	ft_atoi(const char *nptr);
+void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float ra, int **data);
 
 #endif
