@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 14:13:26 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 15:41:26 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float
                 else if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
                     c = glob->n_img->data[(int)tx + (int)ty * RES];
             }   
-            if ((int)ry % SQR_SIZE == SQR_SIZE - 1)
+            else if ((int)ry % SQR_SIZE == SQR_SIZE - 1)
             {  
                 if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
                 {
@@ -299,7 +299,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float
                 else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
                     c = glob->e_img->data[(int)tx + (int)ty * RES];
             }
-            if ((int)rx % SQR_SIZE == 0)
+            else if ((int)rx % SQR_SIZE == 0)
             {  
                 if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
                 {
@@ -322,8 +322,27 @@ void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float
 
 void    ft_move(t_glob *glob, int key)
 {
+   /* double x;
+    double y;
+    int decimalx;
+    int decimaly;*/
+
     if (key == Z)
     {
+         printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
+        // x = (glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE;
+        // y = (glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE;
+        // decimalx = (int)x;
+        // decimaly = (int)y;
+        // x -= decimalx;
+        // y -= decimaly;
+        // printf("x decimal = %f, y deciaml = %f\n", x, y);
+        // if (x < 0.0095 && y < 0.5)
+        //     x = (int)(((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE) - 1);
+        // if (y < 0.0095 && x < 0.5)
+        //     y = (int)(((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)) - 1;
+        // printf("x decimal = %f, y deciaml = %f\n", x, y);
+        //if (glob->map[(int)y][(int)x] != '1')
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += (int)(cos(glob->pa) * MOV_SPD);
@@ -332,6 +351,7 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == Q)
     {
+        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px += (int)(sin(glob->pa) * MOV_SPD);
@@ -340,6 +360,7 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == S)
     {
+        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px -= (int)(cos(glob->pa) * MOV_SPD);
@@ -348,7 +369,8 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == D)
     {
-        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)]);
+        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
             glob->px -= (int)(sin(glob->pa) * MOV_SPD);
             glob->py += (int)(cos(glob->pa) * MOV_SPD);
@@ -404,10 +426,10 @@ int ft_deal_key(int key, void *param)
     glob = (t_glob *)param;
     if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
     {
+       // ft_draw_player(glob, 8, 0x00CDCDCD);
         //if (!ft_raytesting(*glob, key))
-        ft_draw_player(glob, 8, 0x00CDCDCD);
-        ft_move(glob, key);
-        ft_draw_player(glob, 8, 0x00FFFF00);
+            ft_move(glob, key);
+        //ft_draw_player(glob, 8, 0x00FFFF00);
         ft_raycasting(glob);
     }
     if (key == ESC)
