@@ -25,7 +25,7 @@ static int get_texture_color(t_glob *glob, float tx, float ty)
     return (0x00000000);
 }
 
-void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float ra, int **data)
+void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data)
 {
     float     lineh;
     int       lineo;
@@ -38,6 +38,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float
     float   ca;
     int     j;
 
+    (void)get_texture_color;
     ca = glob->pa - ra;
     if (ca < 0)
         ca += 2 * PI;
@@ -57,55 +58,58 @@ void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float
     y = -1;
     while (++y < lineh)
     {
-            tx = (rx + ry) / (SQR_SIZE / RES) % RES;  //remplacer RES
-            c = get_texture_color(glob, tx, ty);
-            if ((int)ry % SQR_SIZE == 0)
-            {  
-                if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
-                {
-                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
-                        c = glob->n_img->data[(int)tx + (int)ty * RES];
-                }
-                else if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
-                    c = glob->n_img->data[(int)tx + (int)ty * RES];
-            }   
-            else if ((int)ry % SQR_SIZE == SQR_SIZE - 1)
-            {  
-                if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' || glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1'))
-                {
-                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)])
-                        c = glob->s_img->data[(int)tx + (int)ty * RES];
-                }
-                else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+            tx = (int)((rx + ry) / (SQR_SIZE / RES)) % RES;  //remplacer RES
+            //c = get_texture_color(glob, tx, ty);
+            j = 0;
+            if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+            {
+                c = glob->n_img->data[(int)tx + (int)ty * RES];
+                j++;
+            }
+            if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1')
+            {
+                c = glob->s_img->data[(int)tx + (int)ty * RES];
+                j++;
+            }
+            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
+            {
+                c = glob->e_img->data[(int)tx + (int)ty * RES];
+                j++;
+            }
+            if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
+            {
+                c = glob->w_img->data[(int)tx + (int)ty * RES];
+                j++;
+            }
+            if (!j)
+            {
+                if ((ra <= PI / 4 && ra >= 0) || (ra >= 7 * PI / 4 && ra <= 2 * PI))
+                    c = glob->w_img->data[(int)tx + (int)ty * RES];
+                else if (ra >= 5 * PI / 4 && ra <= 7 * PI / 4)
                     c = glob->s_img->data[(int)tx + (int)ty * RES];
-            }
-            if ((int)rx % SQR_SIZE == SQR_SIZE - 1)
-            {  
-                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
-                {
-                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)])
-                        c = glob->e_img->data[(int)tx + (int)ty * RES];
-                }
-                else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1')
+                else if (ra >= 3 * PI / 4 && ra <= 5 * PI / 4)
                     c = glob->e_img->data[(int)tx + (int)ty * RES];
+                else if (ra >= PI / 4 && ra <= 3 * PI / 4)
+                    c = glob->n_img->data[(int)tx + (int)ty * RES];
             }
-            else if ((int)rx % SQR_SIZE == 0)
-            {  
-                if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' || glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1'))
-                {
-                    if (&glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] == &glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)])
-                        c = glob->w_img->data[(int)tx + (int)ty * RES];
-                }
-                else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1')
+            else if (j == 2)
+            {
+                if (&glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                    c = glob->n_img->data[(int)tx + (int)ty * RES];
+                else if (&glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                    c = glob->s_img->data[(int)tx + (int)ty * RES];
+                else if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
+                    c = glob->e_img->data[(int)tx + (int)ty * RES];
+                else if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)])
                     c = glob->w_img->data[(int)tx + (int)ty * RES];
             }
             data[0][(int)((i + ((y + lineo) * (SCREEN_W))))] = c;
             ty += ty_step;
     }
-    j = -1;
-    while (++j < lineo)
-        data[0][(int)((i) + (j * (SCREEN_W)))] = glob->ceiling; // remplacer par glob->ceiling
-    j = lineo + lineh - 1;
-    while (++j < SCREEN_H)
-        data[0][(int)((i) + (j * (SCREEN_W)))] = glob->floor;
+    y = -1;
+    while (++y < lineo)
+        data[0][(int)((i) + (y * (SCREEN_W)))] = glob->ceiling; // remplacer par glob->ceiling
+    y = lineo + lineh - 1;
+    while (++y < SCREEN_H)
+        data[0][(int)((i) + (y * (SCREEN_W)))] = glob->floor;
 }

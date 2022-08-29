@@ -267,6 +267,8 @@ void    ft_raycasting(t_glob *glob)
 
     i = 0;
     ra = glob->pa - DR * (FOV / 2);
+    if (ra < 0)
+        ra += 2 * PI;
     i = -1;
     while (++i < SCREEN_W)
     {
@@ -282,6 +284,8 @@ void    ft_raycasting(t_glob *glob)
         if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
             ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
         ra += DR * FOV / SCREEN_W;
+        if (ra > 2 * PI)
+            ra -= 2 * PI;
     }
     mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
 }
