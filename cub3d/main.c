@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 18:48:34 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 14:13:26 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,32 +326,32 @@ void    ft_move(t_glob *glob, int key)
     {
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px += cos(glob->pa) * MOV_SPD;
-            glob->py += sin(glob->pa) * MOV_SPD;
+            glob->px += (int)(cos(glob->pa) * MOV_SPD);
+            glob->py += (int)(sin(glob->pa) * MOV_SPD);
         }
     }
     else if (key == Q)
     {
         if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px += sin(glob->pa) * MOV_SPD;
-            glob->py -= cos(glob->pa) * MOV_SPD;
+            glob->px += (int)(sin(glob->pa) * MOV_SPD);
+            glob->py -= (int)(cos(glob->pa) * MOV_SPD);
         }
     }
     else if (key == S)
     {
         if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px -= cos(glob->pa) * MOV_SPD;
-            glob->py -= sin(glob->pa) * MOV_SPD;
+            glob->px -= (int)(cos(glob->pa) * MOV_SPD);
+            glob->py -= (int)(sin(glob->pa) * MOV_SPD);
         }
     }
     else if (key == D)
     {
         if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px -= sin(glob->pa) * MOV_SPD;
-            glob->py += cos(glob->pa) * MOV_SPD;
+            glob->px -= (int)(sin(glob->pa) * MOV_SPD);
+            glob->py += (int)(cos(glob->pa) * MOV_SPD);
         }
     }
     else if (key == L_ARROW)

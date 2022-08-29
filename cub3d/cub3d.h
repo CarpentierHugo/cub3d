@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/28 18:41:34 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/29 14:02:24 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 #define RES 32
 #define FOV 60
 #define MOV_SPD 10
-#define ROT_SPD 0.1
+#define ROT_SPD 0.2
 #define SCREEN_H 800
 #define SCREEN_W 1200
 
