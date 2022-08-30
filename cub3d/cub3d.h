@@ -14,11 +14,11 @@
 # define CUB3D_H
 
 # ifdef linux
-#  define Z        122
+#  define Z        119
 #  define S        115
-#  define Q        113
+#  define Q        97
 #  define D        100
-#  define M        59
+#  define M        109
 #  define L_ARROW  65361
 #  define R_ARROW  65363
 #  define ESC      65307
