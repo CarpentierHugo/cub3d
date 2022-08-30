@@ -295,8 +295,7 @@ void    ft_raycasting(t_glob *glob)
             ry += sinra;
             length++;
         }
-        //if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
-            ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
+        ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
         ra += DR * FOV / SCREEN_W;
         if (ra > 2 * PI)
             ra -= 2 * PI;
@@ -391,6 +390,24 @@ void    ft_free(t_glob *glob)
         free(glob->w_img->path_texture);
 }
 
+int ft_mouse(int button, int x, int y, void *param)
+{
+    t_glob *glob;
+
+    (void)y;
+    glob = (t_glob *)param;
+    if (button == 1)
+    {
+        glob->pa += (x - SCREEN_W / 2) * (DR * FOV / SCREEN_W);
+        if (glob->pa < 0)
+            glob->pa += 2 * PI;
+        else if (glob->pa > 2 * PI)
+            glob->pa -= 2 * PI;
+        ft_raycasting(glob);
+    }
+    return (0);
+}
+
 int main(int argc, char **argv)
 {
     t_glob   glob[1];
@@ -416,9 +433,9 @@ int main(int argc, char **argv)
     ft_screen(glob);
     glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
-    //ft_draw_player(glob, 8, 0x00FFFF00);
     ft_raycasting(glob);
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
+    mlx_hook(glob->win_ptr, 4, (1L<<2), &ft_mouse, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
     mlx_loop(glob->mlx_ptr);
     mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
