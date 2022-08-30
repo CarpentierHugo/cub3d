@@ -23,9 +23,6 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     int     c;
     float   ty_off;
     float   ca;
-    int     j;
-    int     irx = (int)rx;
-    int     iry = (int)ry;
 
     ca = glob->pa - ra;
     if (ca < 0)
@@ -34,7 +31,7 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
         ca -= 2 * PI;
     length *= cos(ca);
     lineh = SQR_SIZE * SCREEN_H / length;
-    ty_step = RES / lineh; //remplacer RES
+    ty_step = RES / lineh;
     ty_off = 0;
     if (lineh > SCREEN_H)
     {
@@ -46,29 +43,16 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     y = -1;
     while (++y < lineh)
     {
-            tx = (int)((irx + iry) / (SQR_SIZE / RES)) % RES;  //remplacer RES
-            j = 0;
-            if (glob->map[(int)((iry - 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
-            {
+            tx = (int)(((int)rx + (int)ry) / (SQR_SIZE / RES)) % RES;
+            if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry - 1) / SQR_SIZE) == (int)((ry - sin(ra)) / SQR_SIZE))
                 c = glob->n_img->data[(int)tx + (int)ty * RES];
-                j++;
-            }
-            if (glob->map[(int)((iry + 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
-            {
+            else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry + 1) / SQR_SIZE) == (int)((ry - sin(ra)) / SQR_SIZE))
                 c = glob->s_img->data[(int)tx + (int)ty * RES];
-                j++;
-            }
-            if (glob->map[(int)(iry / SQR_SIZE)][(int)((irx + 1) / SQR_SIZE)] != '1')
-            {
+            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (int)((rx + 1) / SQR_SIZE) == (int)((rx - cos(ra)) / SQR_SIZE))
                 c = glob->e_img->data[(int)tx + (int)ty * RES];
-                j++;
-            }
-            if (glob->map[(int)(iry / SQR_SIZE)][(int)((irx - 1) / SQR_SIZE)] != '1')
-            {
+            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (int)((rx - 1) / SQR_SIZE) == (int)((rx - cos(ra)) / SQR_SIZE))
                 c = glob->w_img->data[(int)tx + (int)ty * RES];
-                j++;
-            }
-            if (!j)
+            else
             {
                 if ((ra <= PI / 4 && ra >= 0) || (ra >= 7 * PI / 4 && ra <= 2 * PI))
                     c = glob->w_img->data[(int)tx + (int)ty * RES];
@@ -79,24 +63,13 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
                 else if (ra >= PI / 4 && ra <= 3 * PI / 4)
                     c = glob->n_img->data[(int)tx + (int)ty * RES];
             }
-            else if (j == 2)
-            {
-                if (&glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)((iry - 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
-                    c = glob->n_img->data[(int)tx + (int)ty * RES];
-                if (&glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)((iry + 1) / SQR_SIZE)][(int)(irx / SQR_SIZE)] != '1')
-                    c = glob->s_img->data[(int)tx + (int)ty * RES];
-                if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)(iry / SQR_SIZE)][(int)((irx + 1) / SQR_SIZE)] != '1')
-                    c = glob->e_img->data[(int)tx + (int)ty * RES];
-                if (&glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] == &glob->map[(int)((ry - sin(ra)) / SQR_SIZE)][(int)((rx - cos(ra)) / SQR_SIZE)] && glob->map[(int)(iry / SQR_SIZE)][(int)((irx - 1) / SQR_SIZE)] != '1')
-                    c = glob->w_img->data[(int)tx + (int)ty * RES];
-            }
             data[0][(int)((i + ((y + lineo) * (SCREEN_W))))] = c;
             ty += ty_step;
     }
     y = -1;
     while (++y < lineo)
-        data[0][(int)((i) + (y * (SCREEN_W)))] = glob->ceiling; // remplacer par glob->ceiling
+        data[0][(int)(i + (y * (SCREEN_W)))] = glob->ceiling;
     y = lineo + lineh - 1;
     while (++y < SCREEN_H)
-        data[0][(int)((i) + (y * (SCREEN_W)))] = glob->floor;
+        data[0][(int)(i + (y * (SCREEN_W)))] = glob->floor;
 }
