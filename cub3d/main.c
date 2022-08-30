@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 18:12:43 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:29:04 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,32 +215,34 @@ void    ft_move(t_glob *glob, int key)
     {
         if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px += (int)(cos(glob->pa) * MOV_SPD);
-            glob->py += (int)(sin(glob->pa) * MOV_SPD);
+            //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
+            glob->px += (cos(glob->pa) * MOV_SPD);
+            glob->py += (sin(glob->pa) * MOV_SPD);
         }
     }
     else if (key == Q)
     {
         if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px += (int)(sin(glob->pa) * MOV_SPD);
-            glob->py -= (int)(cos(glob->pa) * MOV_SPD);
+            glob->px +=(sin(glob->pa) * MOV_SPD);
+            glob->py -= (cos(glob->pa) * MOV_SPD);
         }
     }
     else if (key == S)
     {
+        //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
         if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px -= (int)(cos(glob->pa) * MOV_SPD);
-            glob->py -= (int)(sin(glob->pa) * MOV_SPD);
+            glob->px -= (cos(glob->pa) * MOV_SPD);
+            glob->py -= (sin(glob->pa) * MOV_SPD);
         }
     }
     else if (key == D)
     {
         if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
         {
-            glob->px -= (int)(sin(glob->pa) * MOV_SPD);
-            glob->py += (int)(cos(glob->pa) * MOV_SPD);
+            glob->px -= (sin(glob->pa) * MOV_SPD);
+            glob->py += (cos(glob->pa) * MOV_SPD);
         }
     }
     else if (key == L_ARROW)
@@ -264,6 +266,8 @@ void    ft_raycasting(t_glob *glob)
     float   ra;
     float    length;
     int     i;
+    float   sinra;
+    float   cosra;
 
     i = 0;
     ra = glob->pa - DR * (FOV / 2);
@@ -275,10 +279,12 @@ void    ft_raycasting(t_glob *glob)
         rx = glob->px;
         ry = glob->py;
         length = 0;
+        cosra = cos(ra);
+        sinra = sin(ra);
         while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0')
         {
-            rx += cos(ra);
-            ry += sin(ra);
+            rx += cosra;
+            ry += sinra;
             length++;
         }
         if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
@@ -293,19 +299,29 @@ void    ft_raycasting(t_glob *glob)
 int ft_deal_key(int key, void *param)
 {
     t_glob *glob;
+    static int on_off = 0;
 
     glob = (t_glob *)param;
-    if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
+    if (key == ESC)
+        return (ft_exit(glob), 1);
+    if (key == TAB)
+            return (1);
+    if (key == M)
     {
-       // ft_draw_player(glob, 8, 0x00CDCDCD);
-        //if (!ft_raytesting(*glob, key))
+        if (on_off == 0)
+            on_off = 1;
+        else if (on_off == 1)
+            on_off = 0;
+    }
+    else if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
             ft_move(glob, key);
-        //ft_draw_player(glob, 8, 0x00FFFF00);
+    if (on_off == 1)
+    {
         ft_raycasting(glob);
         ft_minimap(glob);
     }
-    else if (key == ESC)
-        ft_exit(glob);
+    else
+        ft_raycasting(glob);
     return (0);
 }
 
@@ -392,7 +408,7 @@ int main(int argc, char **argv)
     ft_screen(glob);
     glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
-    ft_draw_player(glob, 8, 0x00FFFF00);
+    //ft_draw_player(glob, 8, 0x00FFFF00);
     ft_raycasting(glob);
     mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
     mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);

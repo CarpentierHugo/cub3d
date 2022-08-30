@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/29 17:54:43 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:29:05 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 #  define S        115
 #  define Q        113
 #  define D        100
+#  define M        59
 #  define L_ARROW  65361
 #  define R_ARROW  65363
 #  define ESC      65307
+#  define TAB      65289
 # else
 #  define Z         13
 #  define S         1
@@ -33,11 +35,11 @@
 
 #define PI 3.1415926535
 #define DR PI / 180
-#define SQR_SIZE 32
+#define SQR_SIZE 64
 #define RES 32
 #define FOV 60
 #define MOV_SPD SQR_SIZE / 3.2
-#define ROT_SPD 0.20000001
+#define ROT_SPD 0.0999999
 #define SCREEN_H 800
 #define SCREEN_W 1200
 
@@ -84,11 +86,7 @@ typedef struct  s_glob
 int    ft_get_textures(t_glob *glob, int i, int j);
 char    **ft_split_modif(char *str, char c);
 long long int	ft_atoi(const char *nptr);
-<<<<<<< HEAD
-void    ft_modelisation(t_glob *glob, float length, int i, int rx, int ry, float ra, int **data);
-void    ft_minimap(t_glob *glob);
-=======
 void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data);
->>>>>>> 5296ca391a3f7923c4ad9ae122f15837b0e34f55
+void    ft_minimap(t_glob *glob);
 
 #endif

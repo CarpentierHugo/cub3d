@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 15:52:13 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/29 17:51:52 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:29:06 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     int     c;
     float   ty_off;
     float   ca;
+    float   sinry;
+    float   cosrx;
 
     ca = glob->pa - ra;
     if (ca < 0)
@@ -41,16 +43,18 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     lineo = SCREEN_H / 2 - (lineh / 2);
     ty = ty_off * ty_step;
     y = -1;
+    sinry = ry - sin(ra);
+    cosrx = rx - cos(ra);
     while (++y < lineh)
     {
             tx = (int)(((int)rx + (int)ry) / (SQR_SIZE / RES)) % RES;
-            if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry - 1) / SQR_SIZE) == (int)((ry - sin(ra)) / SQR_SIZE))
+            if (glob->map[(int)((ry - 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry - 1) / SQR_SIZE) == (int)((sinry) / SQR_SIZE))
                 c = glob->n_img->data[(int)tx + (int)ty * RES];
-            else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry + 1) / SQR_SIZE) == (int)((ry - sin(ra)) / SQR_SIZE))
+            else if (glob->map[(int)((ry + 1) / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && (int)((ry + 1) / SQR_SIZE) == (int)((sinry) / SQR_SIZE))
                 c = glob->s_img->data[(int)tx + (int)ty * RES];
-            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (int)((rx + 1) / SQR_SIZE) == (int)((rx - cos(ra)) / SQR_SIZE))
+            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx + 1) / SQR_SIZE)] != '1' && (int)((rx + 1) / SQR_SIZE) == (int)((cosrx) / SQR_SIZE))
                 c = glob->e_img->data[(int)tx + (int)ty * RES];
-            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (int)((rx - 1) / SQR_SIZE) == (int)((rx - cos(ra)) / SQR_SIZE))
+            else if (glob->map[(int)(ry / SQR_SIZE)][(int)((rx - 1) / SQR_SIZE)] != '1' && (int)((rx - 1) / SQR_SIZE) == (int)((cosrx) / SQR_SIZE))
                 c = glob->w_img->data[(int)tx + (int)ty * RES];
             else
             {

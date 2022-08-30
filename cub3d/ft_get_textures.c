@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/29 14:01:10 by achatela         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:29:06 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,6 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             break ;
         i++;
     }
-    printf("glob map = %s\n", glob->map[i]);
     if (glob->map[i] == 0)
     {
         printf("Error\nThere is no map is the file\n");
