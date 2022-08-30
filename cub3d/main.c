@@ -302,7 +302,6 @@ int ft_deal_key(int key, void *param)
     static int on_off = 0;
 
     glob = (t_glob *)param;
-    printf("key:%d\n", key);
     if (key == ESC)
         return (ft_exit(glob), 1);
     if (key == TAB)
