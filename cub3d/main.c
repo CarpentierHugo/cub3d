@@ -103,13 +103,21 @@ void    ft_verif_map(char **map)
             else if (map[y][x] != ' ')
                 exit(1);
             if (ispos > 1)
-                exit(1);
+                exit(2);
             if (map[y][x] != '1' && map[y][x] != ' ')
             {
                 if (!y || !x)
-                     exit(1);
-                if (map[y - 1][x] == ' ' || map[y - 1][x + 1] == ' ' || map[y - 1][x + 1] == 0 || map[y][x + 1] == ' ' || map[y][x + 1] == 0 || map[y + 1][x + 1] == ' ' || map[y + 1][x + 1] == 0 || map[y + 1][x] == ' ' || map[y + 1][x] == 0 || map[y + 1][x - 1]  == ' ' || map[y + 1][x - 1]  == 0 || map[y][x - 1] == ' ' || map[y - 1][x - 1] == ' ')
-                     exit(1);
+                    exit(3);
+                if (!map[y + 1])
+                    exit(3);
+                if (map[y - 1][x] == ' ' || !map[y - 1][x])
+                     exit(4);
+                if (map[y][x + 1] == ' ' || !map[y][x + 1])
+                     exit(5);
+                if (map[y + 1][x] == ' ' || !map[y + 1][x])
+                     exit(6);
+                if (map[y][x - 1] == ' ' || !map[y][x - 1])
+                     exit(7);
             }
         }
     }
@@ -213,7 +221,7 @@ void    ft_move(t_glob *glob, int key)
 {
     if (key == Z)
     {
-        if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
         {
             //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
             glob->px += (cos(glob->pa) * MOV_SPD);
@@ -222,7 +230,7 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == Q)
     {
-        if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
         {
             glob->px +=(sin(glob->pa) * MOV_SPD);
             glob->py -= (cos(glob->pa) * MOV_SPD);
@@ -231,7 +239,7 @@ void    ft_move(t_glob *glob, int key)
     else if (key == S)
     {
         //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
-        if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
         {
             glob->px -= (cos(glob->pa) * MOV_SPD);
             glob->py -= (sin(glob->pa) * MOV_SPD);
@@ -239,7 +247,7 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == D)
     {
-        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0')
+        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
         {
             glob->px -= (sin(glob->pa) * MOV_SPD);
             glob->py += (cos(glob->pa) * MOV_SPD);
@@ -281,13 +289,13 @@ void    ft_raycasting(t_glob *glob)
         length = 0;
         cosra = cos(ra);
         sinra = sin(ra);
-        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0')
+        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != ' ')
         {
             rx += cosra;
             ry += sinra;
             length++;
         }
-        if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
+        //if (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] == '1')
             ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
         ra += DR * FOV / SCREEN_W;
         if (ra > 2 * PI)
@@ -399,7 +407,7 @@ int main(int argc, char **argv)
     }
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
-    //ft_verif_map(glob->map + glob->map_begin);
+    ft_verif_map(glob->map);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (ft_free(glob), 1);
