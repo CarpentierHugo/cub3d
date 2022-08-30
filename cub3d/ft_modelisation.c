@@ -63,13 +63,13 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
                 else if (ra >= PI / 4 && ra <= 3 * PI / 4)
                     c = glob->n_img->data[(int)tx + (int)ty * RES];
             }
-            data[0][(int)((i + ((y + lineo) * (SCREEN_W))))] = c;
+            data[0][(int)(i + (y + lineo) * SCREEN_W)] = c;
             ty += ty_step;
     }
     y = -1;
     while (++y < lineo)
-        data[0][(int)(i + (y * (SCREEN_W)))] = glob->ceiling;
+        data[0][(int)(i + y * SCREEN_W)] = glob->ceiling;
     y = lineo + lineh - 1;
     while (++y < SCREEN_H)
-        data[0][(int)(i + (y * (SCREEN_W)))] = glob->floor;
+        data[0][(int)(i + y * SCREEN_W)] = glob->floor;
 }
