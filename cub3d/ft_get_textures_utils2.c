@@ -19,7 +19,7 @@ int	ft_get_ceiling(t_glob *glob, char *texture)
 	if (glob->ceiling != -1)
 		return (1);
 	number = NULL;
-	number = ft_split_modif(texture, ',');
+	number = ft_split_modif(texture, ',', -1, ft_count_words(texture, ','));
 	if (number == NULL)
 		return (1);
 	if (ft_rgb_error(number) == 1)
@@ -42,7 +42,7 @@ int	ft_get_floor(t_glob *glob, char *texture)
 	if (glob->floor != -1)
 		return (1);
 	number = NULL;
-	number = ft_split_modif(texture, ',');
+	number = ft_split_modif(texture, ',', -1, ft_count_words(texture, ','));
 	if (number == NULL)
 		return (1);
 	if (ft_rgb_error(number) == 1)

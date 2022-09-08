@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 19:54:43 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 20:26:42 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ int	ft_count_words(char *str, char c)
 	return (nbword);
 }
 
-char	**ft_split_modif(char *str, char c, int i)
+char	**ft_split_modif(char *str, char c, int i, int k)
 {
 	char	**tab;
 	int		j;
 
-	tab = malloc(sizeof(char *) * (ft_count_words(str, c) + 1));
+	tab = malloc(sizeof(char *) * (k + 1));
 	if (!tab)
 		return (NULL);
-	tab[ft_count_words(str, c)] = 0;
-	while (++i < ft_count_words(str, c))
+	tab[k] = 0;
+	while (++i < k)
 	{
 		j = 0;
 		if (*str == c)
@@ -81,7 +81,7 @@ void	ft_parsing(char *mapfile, t_glob *glob, int i, int size)
 	fd = open(mapfile, O_RDONLY);
 	read(fd, mapstr, size);
 	close(fd);
-	glob->map = ft_split_modif(mapstr, '\n', -1);
+	glob->map = ft_split_modif(mapstr, '\n', -1, ft_count_words(mapstr, '\n'));
 	free(mapstr);
 }
 
@@ -113,6 +113,10 @@ int	main(int argc, char **argv)
 	glob->minimap = 0;
 	if (argc != 2)
 		return (1);
+	argc = ft_strlen(argv[1]);
+	if (argv[1][argc - 4] != '.' || argv[1][argc - 3] != 'c'
+		|| argv[1][argc - 2] != 'u' || argv[1][argc - 1] != 'b')
+		printf("Error\nFile extension not .cub\n");
 	ft_parsing(argv[1], glob, 0, 0);
 	glob->ceiling = -1;
 	glob->floor = -1;

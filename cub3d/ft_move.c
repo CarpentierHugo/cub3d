@@ -16,12 +16,12 @@ void	ft_z(t_glob *glob, float i)
 {
 	while (i < MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '1'
-			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '\0'
-			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+		if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR)] != '1'
+			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR)] != '\0'
+			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR)] != ' ')
 			i += 0.1;
 		else
 			break ;
@@ -37,12 +37,12 @@ void	ft_q(t_glob *glob, float i)
 {
 	while (i < MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '1'
-			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '\0'
-			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+		if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR)] != '1'
+			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR)] != '\0'
+			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR)] != ' ')
 			i += 0.1;
 		else
 			break ;
@@ -58,12 +58,12 @@ void	ft_s(t_glob *glob, float i)
 {
 	while (i < MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '1'
-			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '\0'
-			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+		if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR)] != '1'
+			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR)] != '\0'
+			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR)] != ' ')
 			i += 0.1;
 		else
 			break ;
@@ -79,12 +79,12 @@ void	ft_d(t_glob *glob, float i)
 {
 	while (i < MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '1'
-			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '\0'
-			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
-			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+		if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR)] != '1'
+			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR)] != '\0'
+			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR)] != ' ')
 			i += 0.1;
 		else
 			break ;

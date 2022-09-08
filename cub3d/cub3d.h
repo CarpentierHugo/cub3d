@@ -35,10 +35,10 @@
 
 #define PI 3.1415926535
 #define DR PI / 180
-#define SQR_SIZE 64
+#define SQR 64
 #define RES 32
 #define FOV 60
-#define MOV_SPD SQR_SIZE / 10
+#define MOV_SPD SQR / 10
 #define ROT_SPD 0.05
 #define SCREEN_H 800
 #define SCREEN_W 1200
@@ -93,7 +93,7 @@ typedef struct  s_glob
 }   t_glob;
 
 int    ft_get_textures(t_glob *glob, int i);
-char    **ft_split_modif(char *str, char c, int i);
+char    **ft_split_modif(char *str, char c, int i, int k);
 long long int	ft_atoi(const char *nptr);
 void    ft_minimap(t_glob *glob);
 void    ft_move(t_glob *glob, int key);
@@ -128,5 +128,6 @@ int	ft_exit(t_glob *glob);
 int	ft_mouse(int button, int x, int y, void *param);
 void	ft_draw_player(t_glob *glob, int size, int color);
 int	ft_deal_key(int key, void *param);
+int	ft_count_words(char *str, char c);
 
 #endif

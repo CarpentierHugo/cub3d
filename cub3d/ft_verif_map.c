@@ -58,8 +58,8 @@ void	ft_verif_char(int y, int x, t_glob *glob)
 	else if (glob->map[y][x] == 'N' || glob->map[y][x] == 'S'
 		|| glob->map[y][x] == 'E' || glob->map[y][x] == 'W')
 	{
-		glob->px = x * SQR_SIZE + SQR_SIZE / 2;
-		glob->py = y * SQR_SIZE + SQR_SIZE / 2;
+		glob->px = x * SQR + SQR / 2;
+		glob->py = y * SQR + SQR / 2;
 		if (glob->map[y][x] == 'N')
 			glob->pa = 3 * PI / 2;
 		else if (glob->map[y][x] == 'S')
