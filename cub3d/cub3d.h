@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 19:16:54 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:54:41 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct  s_glob
 }   t_glob;
 
 int    ft_get_textures(t_glob *glob, int i);
-char    **ft_split_modif(char *str, char c);
+char    **ft_split_modif(char *str, char c, int i);
 long long int	ft_atoi(const char *nptr);
 void    ft_minimap(t_glob *glob);
 void    ft_move(t_glob *glob, int key);
@@ -119,5 +119,10 @@ void	forth_line(t_glob *glob, int test, int k);
 void	fifth_line(t_glob *glob, int test, int k);
 int	ft_strlen(char *str);
 void	ft_draw_square(t_glob *glob, int posx, int posy, int color);
+int	ft_screen(t_glob *glob);
+int	ft_exit(t_glob *glob);
+int	ft_mouse(int button, int x, int y, void *param);
+void	ft_draw_player(t_glob *glob, int size, int color);
+int	ft_deal_key(int key, void *param);
 
 #endif
