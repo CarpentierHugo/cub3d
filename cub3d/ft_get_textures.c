@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/30 16:29:06 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:11:15 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,27 @@ static int ft_strlen_custom(char *str)
         }
     }
     return (ret);
+}
+
+void    ft_free_map(t_glob *glob)
+{
+    int i;
+
+    i = 0;
+    while (glob->map[i] != 0)
+    {
+        free(glob->map[i]);
+        i++;
+    }
+    free(glob->map);
+    if (glob->n_img->path_texture != NULL)
+        free(glob->n_img->path_texture);
+    if (glob->s_img->path_texture != NULL)
+        free(glob->s_img->path_texture);
+    if (glob->e_img->path_texture != NULL)
+        free(glob->e_img->path_texture);
+    if (glob->w_img->path_texture != NULL)
+        free(glob->w_img->path_texture);
 }
 
 static int  check_direction(char first, char second)
@@ -133,6 +154,24 @@ static int ft_east_texture(t_glob *glob, char *texture, int length)
     return (0);
 }
 
+int ft_check_integer(char **number)
+{
+    int i;
+    int j;
+
+    i = -1;
+    while (++i < 3)
+    {
+        j = -1;
+        while (number[i][++j] != '\0')
+        {
+            if (number[i][j] < 48 || number[i][j] > 57)
+                return (1);
+        }
+    }
+    return (0);
+}
+
 int ft_rgb_error(char **number)
 {
     if (number[0] == 0 || number[1] == 0 || number[2] == 0) // fonctionne pas quand number == NULL ou que F ou C est suivi de rien ?
@@ -143,6 +182,11 @@ int ft_rgb_error(char **number)
     if (number[3] != 0)
     {
         printf("Error\nRGB Format error (Too many arguments)\n");
+        return (1);
+    }
+    if (ft_check_integer(number) == 1)
+    {
+        printf("Error\nRGB value is not an integer !\n");
         return (1);
     }
     if (((number[0][0] != '-' && ft_strlen_custom(number[0]) > 3) || (number[1][0] != '-' && ft_strlen_custom(number[1]) > 3) || (number[2][0] != '-' && ft_strlen_custom(number[2]) > 3))
@@ -164,13 +208,15 @@ int ft_rgb_error(char **number)
     return (0);
 }
 
-void    ft_free_number(char **number, int i)
+void    ft_free_number(char **number, int i, t_glob *glob, int index)
 {
     while (number[i] != 0)
     {
         free(number[i]);
         i++;
     }
+    if (index == 1)
+        ft_free_map(glob);
     free(number);
 }
 
@@ -186,14 +232,14 @@ int ft_get_ceiling(t_glob *glob, char *texture)
         return (1);
     if (ft_rgb_error(number) == 1)
     {
-        ft_free_number(number, 0);
-        return (1);
+        ft_free_number(number, 0, glob, 1);
+        exit(1);
     }
     glob->ceiling = 0;
     glob->ceiling += ft_atoi(number[0]) * 65536;
     glob->ceiling += ft_atoi(number[1]) * 256;
     glob->ceiling += ft_atoi(number[2]);
-    ft_free_number(number, 0);
+    ft_free_number(number, 0, glob, 0);
     return (0);
 }
 
@@ -209,14 +255,14 @@ int ft_get_floor(t_glob *glob, char *texture)
         return (1);
     if (ft_rgb_error(number) == 1)
     {
-        ft_free_number(number, 0);
-        return (1);
+        ft_free_number(number, 0, glob, 1);
+        exit(1);
     }
     glob->floor = 0;
     glob->floor += ft_atoi(number[0]) * 65536;
     glob->floor += ft_atoi(number[1]) * 256;
     glob->floor += ft_atoi(number[2]);
-    ft_free_number(number, 0);
+    ft_free_number(number, 0, glob, 0);
     return (0);
 }
 
@@ -260,27 +306,6 @@ int     ft_map_beginning(char *str)
     return (0);
 }
 
-void    ft_free_map(t_glob *glob)
-{
-    int i;
-
-    i = 0;
-    while (glob->map[i] != 0)
-    {
-        free(glob->map[i]);
-        i++;
-    }
-    free(glob->map);
-    if (glob->n_img->path_texture != NULL)
-        free(glob->n_img->path_texture);
-    if (glob->s_img->path_texture != NULL)
-        free(glob->s_img->path_texture);
-    if (glob->e_img->path_texture != NULL)
-        free(glob->e_img->path_texture);
-    if (glob->w_img->path_texture != NULL)
-        free(glob->w_img->path_texture);
-}
-
 int ft_str_is_beginning(char *str)
 {
     int i;
@@ -288,7 +313,7 @@ int ft_str_is_beginning(char *str)
     i = 0;
     while (str[i] == ' ')
         i++;
-    if (str[i] == '1')
+    if (str[i] == '1' || str[i] == '0')
         return (1);
     return (0);
 }
@@ -304,7 +329,7 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
-    while (glob->map[++i] != 0) // si count_texture == 6 mais qu'il reste des lignes de textures/floor/ceiling à parser il faut pas arrêter la boucle
+    while (glob->map[++i] != 0)
     {
         if (ft_str_is_beginning(glob->map[i]) == 1)
             break;
@@ -339,6 +364,8 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         printf("Error\nThere is no map is the file\n");
         return (ft_free_map(glob), 2);
     }
+    if (glob->n_img->path_texture == NULL || glob->s_img->path_texture == NULL || glob->e_img->path_texture == NULL || glob->w_img->path_texture == NULL)
+        return (1);
     glob->map_begin = i;
     return (0);
 }

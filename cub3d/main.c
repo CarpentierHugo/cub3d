@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/08/30 16:29:04 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:25:09 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,27 @@ int ft_exit(t_glob *glob)
    // mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
 	mlx_loop_end(glob->mlx_ptr);
     return (0);
+}
+
+void    ft_free(t_glob *glob)
+{
+    int i;
+
+    i = 0;
+    while (glob->free_map[i] != 0)
+    {
+        free(glob->free_map[i]);
+        i++;
+    }
+    free(glob->free_map);
+    if (glob->n_img->path_texture != NULL)
+        free(glob->n_img->path_texture);
+    if (glob->s_img->path_texture != NULL)
+        free(glob->s_img->path_texture);
+    if (glob->e_img->path_texture != NULL)
+        free(glob->e_img->path_texture);
+    if (glob->w_img->path_texture != NULL)
+        free(glob->w_img->path_texture);
 }
 
 int ft_count_words(char *str, char c)
@@ -77,6 +98,25 @@ char    **ft_split_modif(char *str, char c)
     return (tab);
 }
 
+void    ft_error_map(int error, t_glob *glob)
+{
+    printf("Error\n");
+    if (error == 1)
+        printf("Map contains an invalid character !\n");
+    else if (error == 2)
+        printf("Too many starting position in map !\n");
+    else if (error == 3)
+        printf("Map is not surrounded by walls !\n");
+    else if (error == 4)
+        printf("Map has no walls\n");
+    else if (error == 5)
+        printf("Map has no floors\n");
+    else if (error == 6)
+        printf("Map has no starting position\n");
+    ft_free(glob);
+    exit(1);
+}
+
 void    ft_verif_map(char **map, t_glob *glob)
 {
     int y;
@@ -114,18 +154,22 @@ void    ft_verif_map(char **map, t_glob *glob)
                 map[y][x] = '0';
             }
             else if (map[y][x] != ' ')
-                exit(1);
+                ft_error_map(1, glob);
             if (ispos > 1)
-                exit(2);
+                ft_error_map(2, glob);
             if (map[y][x] != '1' && map[y][x] != ' ')
             {
                 if (!y || !x || !map[y + 1] || map[y - 1][x] == ' ' || !map[y - 1][x] || map[y][x + 1] == ' ' || !map[y][x + 1] || map[y + 1][x] == ' ' || !map[y + 1][x] || map[y][x - 1] == ' ' || !map[y][x - 1])
-                    exit(3);
+                    ft_error_map(3, glob);
             }
         }
     }
-    if (!isone || !iszero || !ispos)
-        exit(1);
+    if (!isone)
+        ft_error_map(4, glob);
+    if (!iszero)
+        ft_error_map(5, glob);
+    if (!ispos)
+        ft_error_map(6, glob);
 }
 
 void    ft_parsing(char *mapfile, t_glob *glob)
@@ -352,38 +396,29 @@ void    ft_init_img(t_glob *glob)
     glob->e_img->e = 0;
 }
 
-void    ft_screen(t_glob *glob)
+int   ft_screen(t_glob *glob)
 {
     ft_init_img(glob);
     glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
+    if (glob->n_img->ptr == NULL)
+        return (1);
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
-    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h); // sus glob->s_img->path_texture ??   
+    glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h);
+    if (glob->s_img->ptr == NULL)
+    {
+
+        return (1);
+    }
     glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
+    if (glob->e_img->ptr == NULL)
+        return (1);
     glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr, &glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
     glob->w_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->w_img->path_texture, &glob->w_img->w, &glob->w_img->h);
+    if (glob->w_img->ptr == NULL)
+        return (1);
     glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr, &glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
-}
-
-void    ft_free(t_glob *glob)
-{
-    int i;
-
-    i = 0;
-    while (glob->free_map[i] != 0)
-    {
-        free(glob->free_map[i]);
-        i++;
-    }
-    free(glob->free_map);
-    if (glob->n_img->path_texture != NULL)
-        free(glob->n_img->path_texture);
-    if (glob->s_img->path_texture != NULL)
-        free(glob->s_img->path_texture);
-    if (glob->e_img->path_texture != NULL)
-        free(glob->e_img->path_texture);
-    if (glob->w_img->path_texture != NULL)
-        free(glob->w_img->path_texture);
+    return (0);
 }
 
 int ft_mouse(int button, int x, int y, void *param)
@@ -431,14 +466,16 @@ int main(int argc, char **argv)
 	if (!glob->mlx_ptr)
 		return (ft_free(glob), 1);
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
-    ft_screen(glob);
     glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
-    ft_raycasting(glob);
-    mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
-    mlx_hook(glob->win_ptr, 4, (1L<<2), &ft_mouse, glob);
-    mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
-    mlx_loop(glob->mlx_ptr);
+    if (ft_screen(glob) == 0)
+    {
+        ft_raycasting(glob);
+        mlx_hook(glob->win_ptr, 2, (1L<<0), &ft_deal_key, glob);
+        mlx_hook(glob->win_ptr, 4, (1L<<2), &ft_mouse, glob);
+        mlx_hook(glob->win_ptr, 17, 0, &ft_exit, glob);
+        mlx_loop(glob->mlx_ptr);
+    }
     mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->image);
     mlx_destroy_display(glob->mlx_ptr);
