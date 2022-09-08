@@ -66,6 +66,8 @@ typedef struct s_img
 typedef struct s_glob
 {
 	int					minimap;
+	float				c;
+	float				s;
 	int					infinite;
 	char				**map;
 	int					*data;
