@@ -77,7 +77,7 @@ char    **ft_split_modif(char *str, char c)
     return (tab);
 }
 
-void    ft_verif_map(char **map)
+void    ft_verif_map(char **map, t_glob *glob)
 {
     int y;
     int x;
@@ -99,25 +99,28 @@ void    ft_verif_map(char **map)
             else if (map[y][x] == '0')
                 iszero++;
             else if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
+            { 
+                glob->px = x * SQR_SIZE + SQR_SIZE / 2;
+                glob->py = y * SQR_SIZE + SQR_SIZE / 2;
+                if (glob->map[y][x] == 'N')
+                    glob->pa = 3 * PI / 2;
+                if (glob->map[y][x] == 'S')
+                    glob->pa = PI / 2;
+                if (glob->map[y][x] == 'E')
+                    glob->pa = 0;
+                if (glob->map[y][x] == 'W')
+                    glob->pa = PI;
                 ispos++;
+                map[y][x] = '0';
+            }
             else if (map[y][x] != ' ')
                 exit(1);
             if (ispos > 1)
                 exit(2);
             if (map[y][x] != '1' && map[y][x] != ' ')
             {
-                if (!y || !x)
+                if (!y || !x || !map[y + 1] || map[y - 1][x] == ' ' || !map[y - 1][x] || map[y][x + 1] == ' ' || !map[y][x + 1] || map[y + 1][x] == ' ' || !map[y + 1][x] || map[y][x - 1] == ' ' || !map[y][x - 1])
                     exit(3);
-                if (!map[y + 1])
-                    exit(3);
-                if (map[y - 1][x] == ' ' || !map[y - 1][x])
-                     exit(4);
-                if (map[y][x + 1] == ' ' || !map[y][x + 1])
-                     exit(5);
-                if (map[y + 1][x] == ' ' || !map[y + 1][x])
-                     exit(6);
-                if (map[y][x - 1] == ' ' || !map[y][x - 1])
-                     exit(7);
             }
         }
     }
@@ -179,58 +182,36 @@ void    ft_draw_player(t_glob *glob, int size, int color)
     glob->py = tmpy;
 }
 
-void    ft_draw_map(t_glob *glob)
-{
-    int x;
-    int y;
-
-    y = -1;
-    while (glob->map[++y])
-    {
-        x = -1;
-        while (glob->map[y][++x])
-        {
-            if (glob->map[y][x] == '1')
-            {
-                //ft_draw_square(glob, x, y, 0x00FFFFFF);
-                x += 0;
-            }
-            else
-            {
-                //ft_draw_square(glob, x, y, 0x00CDCDCD);
-                if (glob->map[y][x] != '0' && glob->map[y][x] != ' ')
-                {
-                    glob->px = x * SQR_SIZE + SQR_SIZE / 2;
-                    glob->py = y * SQR_SIZE + SQR_SIZE / 2;
-                    if (glob->map[y][x] == 'N')
-                        glob->pa = 3 * PI / 2;
-                    if (glob->map[y][x] == 'S')
-                        glob->pa = PI / 2;
-                    if (glob->map[y][x] == 'E')
-                        glob->pa = 0;
-                    if (glob->map[y][x] == 'W')
-                        glob->pa = PI;
-                }
-            }
-        }
-    }
-}
-
-
 void    ft_move(t_glob *glob, int key)
 {
+    float i;
+
+    i = 1;
     if (key == Z)
     {
-        if (glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
+        while (i < MOV_SPD + 1)
         {
-            //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py + sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
+            if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+                i += 0.1;
+            else
+                break ;
+        }
+        if (i >= MOV_SPD + 1)
+        {
             glob->px += (cos(glob->pa) * MOV_SPD);
             glob->py += (sin(glob->pa) * MOV_SPD);
         }
     }
     else if (key == Q)
     {
-        if (glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
+        while (i < MOV_SPD + 1)
+        {
+            if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+                i += 0.1;
+            else
+                break ;
+        }
+        if (i >= MOV_SPD + 1)
         {
             glob->px +=(sin(glob->pa) * MOV_SPD);
             glob->py -= (cos(glob->pa) * MOV_SPD);
@@ -238,8 +219,14 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == S)
     {
-        //printf("y = %f, x = %f char de l'index = %c\n", ((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE), ((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE), glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)]);
-        if (glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - sin(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
+        while (i < MOV_SPD + 1)
+        {
+            if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - sin(glob->pa) * i ) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+                i += 0.1;
+            else
+                break ;
+        }
+        if (i >= MOV_SPD + 1)
         {
             glob->px -= (cos(glob->pa) * MOV_SPD);
             glob->py -= (sin(glob->pa) * MOV_SPD);
@@ -247,7 +234,15 @@ void    ft_move(t_glob *glob, int key)
     }
     else if (key == D)
     {
-        if (glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + cos(glob->pa) * MOV_SPD) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * MOV_SPD) / SQR_SIZE)] != ' ')
+        while (i < MOV_SPD + 1)
+        {
+            if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '\0'
+                && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+                i += 0.1;
+            else
+                break ;
+        }
+        if (i >= MOV_SPD + 1)
         {
             glob->px -= (sin(glob->pa) * MOV_SPD);
             glob->py += (cos(glob->pa) * MOV_SPD);
@@ -301,12 +296,13 @@ void    ft_raycasting(t_glob *glob)
             ra -= 2 * PI;
     }
     mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
+    mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, SCREEN_W / 2, SCREEN_H / 2, 0x00FFFFFF);
+
 }
 
 int ft_deal_key(int key, void *param)
 {
     t_glob *glob;
-    static int on_off = 0;
 
     glob = (t_glob *)param;
     if (key == ESC)
@@ -315,14 +311,14 @@ int ft_deal_key(int key, void *param)
             return (1);
     if (key == M)
     {
-        if (on_off == 0)
-            on_off = 1;
-        else if (on_off == 1)
-            on_off = 0;
+        if (glob->minimap == 0)
+            glob->minimap = 1;
+        else if (glob->minimap == 1)
+            glob->minimap = 0;
     }
     else if (key == Z || key == Q || key == S || key == D || key == L_ARROW || key == R_ARROW)
             ft_move(glob, key);
-    if (on_off == 1)
+    if (glob->minimap == 1)
     {
         ft_raycasting(glob);
         ft_minimap(glob);
@@ -405,6 +401,11 @@ int ft_mouse(int button, int x, int y, void *param)
             glob->pa -= 2 * PI;
         ft_raycasting(glob);
     }
+    if (glob->minimap == 1)
+    {
+        ft_raycasting(glob);
+        ft_minimap(glob);
+    }
     return (0);
 }
 
@@ -412,6 +413,7 @@ int main(int argc, char **argv)
 {
     t_glob   glob[1];
 
+    glob->minimap = 0;
     if (argc != 2)
         return (1);
     ft_parsing(argv[1], glob);
@@ -424,12 +426,11 @@ int main(int argc, char **argv)
     }
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
-    ft_verif_map(glob->map);
+    ft_verif_map(glob->map, glob);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (ft_free(glob), 1);
 	glob->win_ptr = mlx_new_window(glob->mlx_ptr, SCREEN_W, SCREEN_H, "cub3d");
-    ft_draw_map(glob);
     ft_screen(glob);
     glob->image = mlx_new_image(glob->mlx_ptr, SCREEN_W, SCREEN_H);
     glob->data = (int *)mlx_get_data_addr(glob->image, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);

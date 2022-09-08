@@ -48,7 +48,7 @@ void    first_line(t_glob *glob, int test)
     while (i < 5)
     {
         if (((int)(glob->py / SQR_SIZE) - 2) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0 || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) - 2)]))
-            ft_draw_square(glob, scale, 0, 1641562); // violet
+            ft_draw_square(glob, scale, 0, 0); // violet
         else if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == '1')
             ft_draw_square(glob, scale, 0, 16000000); // rouge
         else if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == 'N')
@@ -75,7 +75,7 @@ void    second_line(t_glob *glob, int test)
     while (i < 5)
     {
         if (((int)(glob->py / SQR_SIZE) - 1) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0)// || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) - 1)]))
-            ft_draw_square(glob, scale, scale_fix, 1641562); // violet
+            ft_draw_square(glob, scale, scale_fix, 0); // violet
         else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == '1')
             ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
         else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == 'N')
@@ -104,7 +104,7 @@ void    third_line(t_glob *glob, int test)
         if (scale == test * 2)
             ft_draw_square(glob, scale, scale_fix, 16776960);
         else if (((int)(glob->py / SQR_SIZE)) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0 || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE))]))
-            ft_draw_square(glob, scale, scale_fix, 1641562); // violet
+            ft_draw_square(glob, scale, scale_fix, 0); // violet
         else if (glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == '1')
             ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
         else if (glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == 'N')
@@ -131,7 +131,7 @@ void    forth_line(t_glob *glob, int test, int k)
     while (i < 5)
     {
         if (((int)(glob->py / SQR_SIZE) + 1) < k - k || (int)((glob->px / SQR_SIZE) + j) < 0)//|| (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) + 1)]))
-            ft_draw_square(glob, scale, scale_fix, 1641562); // violet
+            ft_draw_square(glob, scale, scale_fix, 0); // violet
         else if (glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == '1')
             ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
         else if (glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == 'N') //  changer pour check toutes les positions
@@ -158,7 +158,7 @@ void    fifth_line(t_glob *glob, int test, int k)
     while (i < 5)
     {
         if (((int)(glob->py / SQR_SIZE) + 2) > k - 1|| (int)((glob->px / SQR_SIZE) + j) < 0)//|| (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) + 2)]))
-            ft_draw_square(glob, scale, scale_fix, 1641562); // violet
+            ft_draw_square(glob, scale, scale_fix, 0); // violet
         else if (glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == '1')
             ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
         else if (glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == 'N')

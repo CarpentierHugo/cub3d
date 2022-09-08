@@ -39,7 +39,7 @@
 #define RES 32
 #define FOV 60
 #define MOV_SPD SQR_SIZE / 10
-#define ROT_SPD 0.0999999
+#define ROT_SPD 0.05
 #define SCREEN_H 800
 #define SCREEN_W 1200
 
@@ -65,6 +65,7 @@ typedef struct  s_img
 
 typedef struct  s_glob
 {
+    int     minimap;
     int     infinite;
     char    **map;
     int     *data;
