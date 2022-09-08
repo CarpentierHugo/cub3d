@@ -86,6 +86,10 @@ typedef struct  s_glob
     int     ispos;
     int     isone;
     int     iszero;
+    float   ry;
+    float   rx;
+    float   ra;
+    int     length;
 }   t_glob;
 
 int    ft_get_textures(t_glob *glob, int i);
