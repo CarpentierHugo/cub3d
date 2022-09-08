@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 17:23:50 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:40:08 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,43 +29,6 @@ int ft_exit(t_glob *glob)
    // mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
 	mlx_loop_end(glob->mlx_ptr);
     return (0);
-}
-
-void    ft_free(t_glob *glob)
-{
-    int i;
-
-    i = 0;
-    while (glob->free_map[i] != 0)
-    {
-        free(glob->free_map[i]);
-        i++;
-    }
-    free(glob->free_map);
-    if (glob->n_img->path_texture != NULL)
-    {
-        if (glob->n_img->ptr != NULL)
-            mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
-        free(glob->n_img->path_texture);
-    }
-    if (glob->s_img->path_texture != NULL)
-    {
-        if (glob->s_img->ptr != NULL)
-            mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
-        free(glob->s_img->path_texture);
-    }
-    if (glob->e_img->path_texture != NULL)
-    {
-        if (glob->e_img->ptr != NULL)
-            mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
-        free(glob->e_img->path_texture);
-    }
-    if (glob->w_img->path_texture != NULL)
-    {
-        if (glob->w_img->ptr != NULL)
-            mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
-        free(glob->w_img->path_texture);
-    }
 }
 
 int ft_count_words(char *str, char c)
@@ -122,100 +85,6 @@ char    **ft_split_modif(char *str, char c)
     return (tab);
 }
 
-void    ft_error_map(int error, t_glob *glob)
-{
-    printf("Error\n");
-    if (error == 0)
-        printf("Map contains empty lines\n");
-    if (error == 1)
-        printf("Map contains an invalid character !\n");
-    else if (error == 2)
-        printf("Too many starting position in map !\n");
-    else if (error == 3)
-        printf("Map is not surrounded by walls !\n");
-    else if (error == 4)
-        printf("Map has no walls\n");
-    else if (error == 5)
-        printf("Map has no floors\n");
-    else if (error == 6)
-        printf("Map has no starting position\n");
-    ft_free(glob);
-    exit(1);
-}
-
-void    ft_check_empty_lines(char **map, t_glob *glob)
-{
-    int i;
-    int j;
-
-    i = -1;
-    while (map[++i])
-    {
-        j = 0;
-        while (map[i][j] == ' ')
-            j++;
-        if (map[i][j] == '\0')
-            ft_error_map(0, glob);
-    }
-}
-
-void    ft_verif_map(char **map, t_glob *glob)
-{
-    int y;
-    int x;
-    int isone;
-    int iszero;
-    int ispos;
-
-    isone = 0;
-    iszero = 0;
-    ispos = 0;
-    y = -1;
-    
-    ft_check_empty_lines(map, glob);
-    while (map[++y])
-    {
-        x = -1;
-        while (map[y][++x])
-        {
-            if (map[y][x] == '1')
-                isone++;
-            else if (map[y][x] == '0')
-                iszero++;
-            else if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
-            { 
-                glob->px = x * SQR_SIZE + SQR_SIZE / 2;
-                glob->py = y * SQR_SIZE + SQR_SIZE / 2;
-                if (glob->map[y][x] == 'N')
-                    glob->pa = 3 * PI / 2;
-                if (glob->map[y][x] == 'S')
-                    glob->pa = PI / 2;
-                if (glob->map[y][x] == 'E')
-                    glob->pa = 0;
-                if (glob->map[y][x] == 'W')
-                    glob->pa = PI;
-                ispos++;
-                map[y][x] = '0';
-            }
-            else if (map[y][x] != ' ')
-                ft_error_map(1, glob);
-            if (ispos > 1)
-                ft_error_map(2, glob);
-            if (map[y][x] != '1' && map[y][x] != ' ')
-            {
-                if (!y || !x || !map[y + 1] || map[y - 1][x] == ' ' || !map[y - 1][x] || map[y][x + 1] == ' ' || !map[y][x + 1] || map[y + 1][x] == ' ' || !map[y + 1][x] || map[y][x - 1] == ' ' || !map[y][x - 1])
-                    ft_error_map(3, glob);
-            }
-        }
-    }
-    if (!isone)
-        ft_error_map(4, glob);
-    if (!iszero)
-        ft_error_map(5, glob);
-    if (!ispos)
-        ft_error_map(6, glob);
-}
-
 void    ft_parsing(char *mapfile, t_glob *glob)
 {
     char    *mapstr;
@@ -268,124 +137,6 @@ void    ft_draw_player(t_glob *glob, int size, int color)
         glob->py++;
     }
     glob->py = tmpy;
-}
-
-void    ft_move(t_glob *glob, int key)
-{
-    float i;
-
-    i = 1;
-    if (key == Z)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px += (cos(glob->pa) * MOV_SPD);
-            glob->py += (sin(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == Q)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px +=(sin(glob->pa) * MOV_SPD);
-            glob->py -= (cos(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == S)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - sin(glob->pa) * i ) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px -= (cos(glob->pa) * MOV_SPD);
-            glob->py -= (sin(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == D)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '\0'
-                && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px -= (sin(glob->pa) * MOV_SPD);
-            glob->py += (cos(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == L_ARROW)
-    {
-        glob->pa -= ROT_SPD;
-        if (glob->pa < 0)
-            glob->pa += 2 * PI;
-    }
-    else if (key == R_ARROW)
-    {
-        glob->pa += ROT_SPD;
-        if (glob->pa > 2 * PI)
-            glob->pa -= 2 * PI;
-    }
-}
-
-void    ft_raycasting(t_glob *glob)
-{
-    float   rx;
-    float   ry;
-    float   ra;
-    float    length;
-    int     i;
-    float   sinra;
-    float   cosra;
-
-    i = 0;
-    ra = glob->pa - DR * (FOV / 2);
-    if (ra < 0)
-        ra += 2 * PI;
-    i = -1;
-    while (++i < SCREEN_W)
-    {
-        rx = glob->px;
-        ry = glob->py;
-        length = 0;
-        cosra = cos(ra);
-        sinra = sin(ra);
-        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != ' ')
-        {
-            rx += cosra;
-            ry += sinra;
-            length++;
-        }
-        ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
-        ra += DR * FOV / SCREEN_W;
-        if (ra > 2 * PI)
-            ra -= 2 * PI;
-    }
-    mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
-    mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, SCREEN_W / 2, SCREEN_H / 2, 0x00FFFFFF);
-
 }
 
 int ft_deal_key(int key, void *param)

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 15:52:13 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 15:59:04 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:38:53 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,41 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
     y = lineo + lineh - 1;
     while (++y < SCREEN_H)
         data[0][(int)(i + y * SCREEN_W)] = glob->floor;
+}
+
+void    ft_raycasting(t_glob *glob)
+{
+    float   rx;
+    float   ry;
+    float   ra;
+    float    length;
+    int     i;
+    float   sinra;
+    float   cosra;
+
+    i = 0;
+    ra = glob->pa - DR * (FOV / 2);
+    if (ra < 0)
+        ra += 2 * PI;
+    i = -1;
+    while (++i < SCREEN_W)
+    {
+        rx = glob->px;
+        ry = glob->py;
+        length = 0;
+        cosra = cos(ra);
+        sinra = sin(ra);
+        while (glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '1' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != '\0' && glob->map[(int)(ry / SQR_SIZE)][(int)(rx / SQR_SIZE)] != ' ')
+        {
+            rx += cosra;
+            ry += sinra;
+            length++;
+        }
+        ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
+        ra += DR * FOV / SCREEN_W;
+        if (ra > 2 * PI)
+            ra -= 2 * PI;
+    }
+    mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
+    mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, SCREEN_W / 2, SCREEN_H / 2, 0x00FFFFFF);
 }
