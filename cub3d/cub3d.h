@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 17:38:56 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:16:54 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct  s_glob
     float   pa;
 }   t_glob;
 
-int    ft_get_textures(t_glob *glob, int i, int j);
+int    ft_get_textures(t_glob *glob, int i);
 char    **ft_split_modif(char *str, char c);
 long long int	ft_atoi(const char *nptr);
 void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data);
@@ -94,5 +94,28 @@ void    ft_move(t_glob *glob, int key);
 void    ft_free(t_glob *glob);
 void    ft_verif_map(char **map, t_glob *glob);
 void    ft_raycasting(t_glob *glob);
+int	ft_north_texture(t_glob *glob, char *texture, int length);
+int	ft_south_texture(t_glob *glob, char *texture, int length);
+int	ft_west_texture(t_glob *glob, char *texture, int length);
+int	ft_east_texture(t_glob *glob, char *texture, int length);
+int	ft_rgb_error(char **number);
+void	ft_free_map(t_glob *glob);
+int	check_direction(char first, char second);
+int	ft_check_integer(char **number);
+int	ft_rgb_error2(char **number);
+int	ft_strlen_custom(char *str);
+int	ft_get_ceiling(t_glob *glob, char *texture);
+int	ft_get_floor(t_glob *glob, char *texture);
+int	ft_path_texture(t_glob *glob, char direction, int j, char *texture);
+int	ft_map_beginning(char *str);
+int	ft_str_is_beginning(char *str);
+void	ft_free_number(char **number, int i, t_glob *glob, int index);
+void	first_line(t_glob *glob, int test);
+void	second_line(t_glob *glob, int test);
+void	third_line(t_glob *glob, int test);
+void	forth_line(t_glob *glob, int test, int k);
+void	fifth_line(t_glob *glob, int test, int k);
+int	ft_strlen(char *str);
+void	ft_draw_square(t_glob *glob, int posx, int posy, int color);
 
 #endif

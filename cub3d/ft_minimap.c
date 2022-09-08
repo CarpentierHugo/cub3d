@@ -6,189 +6,49 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 17:51:36 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/30 16:29:06 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:19:02 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void    ft_draw_square(t_glob *glob, int posx, int posy, int color)
+void	ft_draw_square(t_glob *glob, int posx, int posy, int color)
 {
-    int x;
-    int y;
+	int	x;
+	int	y;
 
-    y = -1;
-    while (++y < SCREEN_H / 8 / 5)
-    {
-        x = -1;
-        while (++x < SCREEN_H / 8 / 5)
-            mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, posx + x, posy + y, color);
-    }
+	y = -1;
+	while (++y < SCREEN_H / 8 / 5)
+	{
+		x = -1;
+		while (++x < SCREEN_H / 8 / 5)
+			mlx_pixel_put(glob->mlx_ptr,
+				glob->win_ptr, posx + x, posy + y, color);
+	}
 }
 
-static int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-    int i;
-    i = 0;
+	int	i;
 
-    while (str[i])
-        i++;
-    return (i);
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-void    first_line(t_glob *glob, int test)
+void	ft_minimap(t_glob *glob)
 {
-    int i;
-    int j;
-    int scale;
+	int	i;
 
-    scale = 0;
-    j = -2;
-    i = 0;
-    while (i < 5)
-    {
-        if (((int)(glob->py / SQR_SIZE) - 2) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0 || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) - 2)]))
-            ft_draw_square(glob, scale, 0, 0); // violet
-        else if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == '1')
-            ft_draw_square(glob, scale, 0, 16000000); // rouge
-        else if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)(glob->px / SQR_SIZE) + j] == 'N')
-            ft_draw_square(glob, scale, 0, 1669722); // vert bizzare
-        else //if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)glob->px / SQR_SIZE] == ' ' || glob->map[(int)(glob->py / SQR_SIZE) - j][(int)glob->px / SQR_SIZE] == '\0')
-            ft_draw_square(glob, scale, 0, 0);
-        i++;
-        j++;
-        scale += test;
-    }
-}
-
-void    second_line(t_glob *glob, int test)
-{
-    int i;
-    int j;
-    int scale;
-    int scale_fix;
-
-    scale_fix = test;
-    scale = 0;
-    j = -2;
-    i = 0;
-    while (i < 5)
-    {
-        if (((int)(glob->py / SQR_SIZE) - 1) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0)// || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) - 1)]))
-            ft_draw_square(glob, scale, scale_fix, 0); // violet
-        else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == '1')
-            ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
-        else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)(glob->px / SQR_SIZE) + j] == 'N')
-            ft_draw_square(glob, scale, scale_fix, 1669722); // vert bizzare
-        else //if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)glob->px / SQR_SIZE] == ' ' || glob->map[(int)(glob->py / SQR_SIZE) - j][(int)glob->px / SQR_SIZE] == '\0')
-            ft_draw_square(glob, scale, scale_fix, 0);
-        i++;
-        j++;
-        scale += test;
-    }
-}
-
-void    third_line(t_glob *glob, int test)
-{
-    int i;
-    int j;
-    int scale;
-    int scale_fix;
-
-    scale_fix = test * 2;
-    scale = 0;
-    j = -2;
-    i = 0;
-    while (i < 5)
-    {
-        if (scale == test * 2)
-            ft_draw_square(glob, scale, scale_fix, 16776960);
-        else if (((int)(glob->py / SQR_SIZE)) < 0 || (int)((glob->px / SQR_SIZE) + j) < 0 || (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE))]))
-            ft_draw_square(glob, scale, scale_fix, 0); // violet
-        else if (glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == '1')
-            ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
-        else if (glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE)][(int)(glob->px / SQR_SIZE) + j] == 'N')
-            ft_draw_square(glob, scale, scale_fix, 1669722); // vert bizzare
-        else //if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)glob->px / SQR_SIZE] == ' ' || glob->map[(int)(glob->py / SQR_SIZE) - j][(int)glob->px / SQR_SIZE] == '\0')
-            ft_draw_square(glob, scale, scale_fix, 0);
-        i++;
-        j++;
-        scale += test;
-    }
-}
-
-void    forth_line(t_glob *glob, int test, int k)
-{
-    int i;
-    int j;
-    int scale;
-    int scale_fix;
-
-    scale_fix = test * 3;
-    scale = 0;
-    j = -2;
-    i = 0;
-    while (i < 5)
-    {
-        if (((int)(glob->py / SQR_SIZE) + 1) < k - k || (int)((glob->px / SQR_SIZE) + j) < 0)//|| (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) + 1)]))
-            ft_draw_square(glob, scale, scale_fix, 0); // violet
-        else if (glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == '1')
-            ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
-        else if (glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) + 1][(int)(glob->px / SQR_SIZE) + j] == 'N') //  changer pour check toutes les positions
-            ft_draw_square(glob, scale, scale_fix, 1669722); // vert bizzare
-        else //if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)glob->px / SQR_SIZE] == ' ' || glob->map[(int)(glob->py / SQR_SIZE) - j][(int)glob->px / SQR_SIZE] == '\0')
-            ft_draw_square(glob, scale, scale_fix, 0);
-        i++;
-        j++;
-        scale += test;
-    }
-}
-
-void    fifth_line(t_glob *glob, int test, int k)
-{
-    int i;
-    int j;
-    int scale;
-    int scale_fix;
-
-    scale_fix = test * 4;
-    scale = 0;
-    j = -2;
-    i = 0;
-    while (i < 5)
-    {
-        if (((int)(glob->py / SQR_SIZE) + 2) > k - 1|| (int)((glob->px / SQR_SIZE) + j) < 0)//|| (int)((glob->px / SQR_SIZE) + j) > ft_strlen(glob->map[(int)((glob->py / SQR_SIZE) + 2)]))
-            ft_draw_square(glob, scale, scale_fix, 0); // violet
-        else if (glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == '1')
-            ft_draw_square(glob, scale, scale_fix, 16000000); // rouge
-        else if (glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == '0' || glob->map[(int)(glob->py / SQR_SIZE) + 2][(int)(glob->px / SQR_SIZE) + j] == 'N')
-            ft_draw_square(glob, scale, scale_fix, 1669722); // vert bizzare
-        else //if (glob->map[(int)(glob->py / SQR_SIZE) - 2][(int)glob->px / SQR_SIZE] == ' ' || glob->map[(int)(glob->py / SQR_SIZE) - j][(int)glob->px / SQR_SIZE] == '\0')
-            ft_draw_square(glob, scale, scale_fix, 0);
-        i++;
-        j++;
-        scale += test;
-    }
-}
-
-void ft_minimap(t_glob *glob)
-{
-    int i;
-
-    i = 0;
-    while (glob->map[i] != 0)
-        i++;
-    first_line(glob, SCREEN_H / 8 / 5);
-    second_line(glob, SCREEN_H / 8 / 5);
-    third_line(glob, SCREEN_H / 8 / 5);
-    forth_line(glob, SCREEN_H / 8 / 5, i);
-    fifth_line(glob, SCREEN_H / 8 / 5, i);
-    
-  /*  if (((int)(glob->py / SQR_SIZE) - 1) == -1 || glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)glob->px / SQR_SIZE] != '1')
-        ft_draw_square(glob, 0, 0, 16000000);
-    else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)glob->px / SQR_SIZE] != '0')
-        ft_draw_square(glob, 0, 0, glob->floor);
-    else if (glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)glob->px / SQR_SIZE] != ' ' || glob->map[(int)(glob->py / SQR_SIZE) - 1][(int)glob->px / SQR_SIZE] != '\0')
-        ft_draw_square(glob, 0, 0, 0);*/
-    return ;
+	i = 0;
+	while (glob->map[i] != 0)
+		i++;
+	first_line(glob, SCREEN_H / 8 / 5);
+	second_line(glob, SCREEN_H / 8 / 5);
+	third_line(glob, SCREEN_H / 8 / 5);
+	forth_line(glob, SCREEN_H / 8 / 5, i);
+	fifth_line(glob, SCREEN_H / 8 / 5, i);
+	ft_draw_square(glob, SCREEN_H / 8 / 5 * 2, SCREEN_H / 8 / 5 * 2, 16776960);
+	return ;
 }

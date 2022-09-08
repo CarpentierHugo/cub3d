@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 17:40:08 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:51:57 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ int main(int argc, char **argv)
     ft_parsing(argv[1], glob);
     glob->ceiling = -1;
     glob->floor = -1;
-    if (ft_get_textures(glob, -1, 0) != 0)
+    if (ft_get_textures(glob, -1) != 0)
         return (1);
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
