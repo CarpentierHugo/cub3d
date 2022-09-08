@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 17:35:51 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 17:37:04 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:43:12 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void    ft_verif_map(char **map, t_glob *glob)
     iszero = 0;
     ispos = 0;
     y = -1;
-    
     ft_check_empty_lines(map, glob);
     while (map[++y])
     {
