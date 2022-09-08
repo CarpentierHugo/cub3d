@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:06:46 by achatela          #+#    #+#             */
-/*   Updated: 2022/08/27 15:51:48 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:55:38 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 long long int	ft_atoi(const char *nptr)
 {
 	long long int	number;
-	int	a;
-	int	neg;
+	int				a;
+	int				neg;
 
 	neg = 1;
 	a = 0;

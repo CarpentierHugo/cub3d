@@ -1,4 +1,4 @@
-SRC	=		main.c ft_get_textures.c ft_atoi.c ft_modelisation.c ft_minimap.c ft_move.c ft_free.c ft_verif_map.c ft_assign_texture.c ft_get_textures_utils.c ft_get_textures_utils2.c ft_minimap_lines.c
+SRC	=		main.c ft_get_textures.c ft_atoi.c ft_modelisation.c ft_minimap.c ft_move.c ft_free.c ft_verif_map.c ft_assign_texture.c ft_get_textures_utils.c ft_get_textures_utils2.c ft_minimap_lines.c ft_utils.c ft_utils2.c
 
 OBJ	=		$(SRC:.c=.o)
 
