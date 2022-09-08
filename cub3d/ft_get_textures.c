@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 16:11:15 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:21:34 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,20 @@ static int  check_direction(char first, char second)
 {
     if (first == 'C' && second == ' ')
         return (2);
-    if (first == 'F' && second == ' ')
+    else if (first == 'F' && second == ' ')
         return (2);
-    if (first == 'N' && second == 'O')
+    else if (first == 'N' && second == 'O')
         return (2);
-    if (first == 'S' && second == 'O')
+    else if (first == 'S' && second == 'O')
         return (2);
-    if (first == 'W' && second == 'E')
+    else if (first == 'W' && second == 'E')
         return (2);
-    if (first == 'E' && second == 'A')
+    else if (first == 'E' && second == 'A')
          return (2);
+    else if (first == '\0')
+        return (2);
+    else
+        return (1);
     // if (first == 'N')
     //     return (1);
     // if (first == 'S')
@@ -75,7 +79,6 @@ static int  check_direction(char first, char second)
     //     return (1);
     // if (first == 'E')
     //     return (1);
-    return (0);
 }
 
 static int ft_north_texture(t_glob *glob, char *texture, int length)
@@ -329,14 +332,22 @@ int    ft_get_textures(t_glob *glob, int i, int j)
     glob->s_img->path_texture = NULL;
     glob->w_img->path_texture = NULL;
     glob->e_img->path_texture = NULL;
+    glob->n_img->ptr = NULL;
+    glob->s_img->ptr = NULL;
+    glob->e_img->ptr = NULL;
+    glob->w_img->ptr = NULL;
     while (glob->map[++i] != 0)
     {
+        while ( glob->map[i] != 0 && glob->map[i][0] == '\0')
+            i++;
         if (ft_str_is_beginning(glob->map[i]) == 1)
             break;
         while (glob->map[i][j] && glob->map[i][j] == ' ')
             j++;
         if (glob->map[i][j] && check_direction(glob->map[i][j], glob->map[i][j + 1]) != 0)
             direction = glob->map[i][j];
+        if (check_direction(glob->map[i][j], glob->map[i][j + 1]) == 1 && count_texture < 6)
+            return (printf("Error\nInvalid argument before map\n"));
         if (glob->map[i][j])
             j += 2;
         while (glob->map[i][j] && glob->map[i][j] == ' ')
@@ -346,7 +357,12 @@ int    ft_get_textures(t_glob *glob, int i, int j)
             if (direction != '\0' && ft_path_texture(glob, direction, j, glob->map[i] + j) == 0)
                 count_texture++;
             else
-                return (printf("Error\nToo many elements before map\n"), ft_free_map(glob), 1);
+            {
+                if (count_texture < 6)
+                    return (printf("Error\nToo few argument before map\n"), ft_free_map(glob), 1);
+                else
+                    return (printf("Error\nToo many elements before map\n"), ft_free_map(glob), 1);
+            }
         }
         j = 0;
         direction = '\0';
@@ -364,8 +380,6 @@ int    ft_get_textures(t_glob *glob, int i, int j)
         printf("Error\nThere is no map is the file\n");
         return (ft_free_map(glob), 2);
     }
-    if (glob->n_img->path_texture == NULL || glob->s_img->path_texture == NULL || glob->e_img->path_texture == NULL || glob->w_img->path_texture == NULL)
-        return (1);
     glob->map_begin = i;
     return (0);
 }

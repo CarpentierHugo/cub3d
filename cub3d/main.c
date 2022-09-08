@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 16:25:09 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:23:50 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,18 @@
 
 int ft_exit(t_glob *glob)
 {
-    mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
-    mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
+    if (glob->n_img->ptr != NULL)
+        mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
+    if (glob->s_img->ptr != NULL)
+        mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
+    if (glob->e_img->ptr != NULL)
+        mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
+    if (glob->w_img->ptr != NULL)
+        mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
+    glob->n_img->ptr = NULL;
+    glob->s_img->ptr = NULL;
+    glob->e_img->ptr = NULL;
+    glob->w_img->ptr = NULL;
    // mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
 	mlx_loop_end(glob->mlx_ptr);
     return (0);
@@ -35,13 +43,29 @@ void    ft_free(t_glob *glob)
     }
     free(glob->free_map);
     if (glob->n_img->path_texture != NULL)
+    {
+        if (glob->n_img->ptr != NULL)
+            mlx_destroy_image(glob->mlx_ptr, glob->n_img->ptr);
         free(glob->n_img->path_texture);
+    }
     if (glob->s_img->path_texture != NULL)
+    {
+        if (glob->s_img->ptr != NULL)
+            mlx_destroy_image(glob->mlx_ptr, glob->s_img->ptr);
         free(glob->s_img->path_texture);
+    }
     if (glob->e_img->path_texture != NULL)
+    {
+        if (glob->e_img->ptr != NULL)
+            mlx_destroy_image(glob->mlx_ptr, glob->e_img->ptr);
         free(glob->e_img->path_texture);
+    }
     if (glob->w_img->path_texture != NULL)
+    {
+        if (glob->w_img->ptr != NULL)
+            mlx_destroy_image(glob->mlx_ptr, glob->w_img->ptr);
         free(glob->w_img->path_texture);
+    }
 }
 
 int ft_count_words(char *str, char c)
@@ -101,6 +125,8 @@ char    **ft_split_modif(char *str, char c)
 void    ft_error_map(int error, t_glob *glob)
 {
     printf("Error\n");
+    if (error == 0)
+        printf("Map contains empty lines\n");
     if (error == 1)
         printf("Map contains an invalid character !\n");
     else if (error == 2)
@@ -117,6 +143,22 @@ void    ft_error_map(int error, t_glob *glob)
     exit(1);
 }
 
+void    ft_check_empty_lines(char **map, t_glob *glob)
+{
+    int i;
+    int j;
+
+    i = -1;
+    while (map[++i])
+    {
+        j = 0;
+        while (map[i][j] == ' ')
+            j++;
+        if (map[i][j] == '\0')
+            ft_error_map(0, glob);
+    }
+}
+
 void    ft_verif_map(char **map, t_glob *glob)
 {
     int y;
@@ -129,6 +171,8 @@ void    ft_verif_map(char **map, t_glob *glob)
     iszero = 0;
     ispos = 0;
     y = -1;
+    
+    ft_check_empty_lines(map, glob);
     while (map[++y])
     {
         x = -1;
@@ -405,10 +449,7 @@ int   ft_screen(t_glob *glob)
     glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr, &glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
     glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h);
     if (glob->s_img->ptr == NULL)
-    {
-
         return (1);
-    }
     glob->s_img->data = (int *)mlx_get_data_addr(glob->s_img->ptr, &glob->s_img->bpp, &glob->s_img->sl, &glob->s_img->e);
     glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr, glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
     if (glob->e_img->ptr == NULL)
@@ -455,10 +496,7 @@ int main(int argc, char **argv)
     glob->ceiling = -1;
     glob->floor = -1;
     if (ft_get_textures(glob, -1, 0) != 0)
-    {
-        printf("Error (si c'est le seul message le cas n'est pas géré)\n");
         return (1);
-    }
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
     ft_verif_map(glob->map, glob);
@@ -478,8 +516,8 @@ int main(int argc, char **argv)
     }
     mlx_destroy_window(glob->mlx_ptr, glob->win_ptr);
     mlx_destroy_image(glob->mlx_ptr, glob->image);
+    ft_free(glob);
     mlx_destroy_display(glob->mlx_ptr);
     free(glob->mlx_ptr);
-    ft_free(glob);
     return (0);
 }
