@@ -83,16 +83,18 @@ typedef struct  s_glob
     float   px;
     float   py;
     float   pa;
+    int     ispos;
+    int     isone;
+    int     iszero;
 }   t_glob;
 
 int    ft_get_textures(t_glob *glob, int i, int j);
 char    **ft_split_modif(char *str, char c);
 long long int	ft_atoi(const char *nptr);
-void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data);
 void    ft_minimap(t_glob *glob);
 void    ft_move(t_glob *glob, int key);
 void    ft_free(t_glob *glob);
-void    ft_verif_map(char **map, t_glob *glob);
+void    ft_verif_map(t_glob *glob);
 void    ft_raycasting(t_glob *glob);
 
 #endif

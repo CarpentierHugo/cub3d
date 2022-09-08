@@ -250,7 +250,7 @@ int main(int argc, char **argv)
         return (1);
     glob->free_map = glob->map;
     glob->map += glob->map_begin;
-    ft_verif_map(glob->map, glob);
+    ft_verif_map(glob);
     glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
 		return (ft_free(glob), 1);

@@ -12,82 +12,110 @@
 
 #include "cub3d.h"
 
-void    ft_move(t_glob *glob, int key)
+void	ft_z(t_glob *glob, float i)
 {
-    float i;
+	while (i < MOV_SPD + 1)
+	{
+		if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '1'
+			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '\0'
+			&& glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+			i += 0.1;
+		else
+			break ;
+	}
+	if (i >= MOV_SPD + 1)
+	{
+		glob->px += (cos(glob->pa) * MOV_SPD);
+		glob->py += (sin(glob->pa) * MOV_SPD);
+	}
+}
 
-    i = 1;
-    if (key == Z)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py + sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + cos(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px += (cos(glob->pa) * MOV_SPD);
-            glob->py += (sin(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == Q)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px +=(sin(glob->pa) * MOV_SPD);
-            glob->py -= (cos(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == S)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '\0' && glob->map[(int)((glob->py - sin(glob->pa) * i ) / SQR_SIZE)][(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px -= (cos(glob->pa) * MOV_SPD);
-            glob->py -= (sin(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == D)
-    {
-        while (i < MOV_SPD + 1)
-        {
-            if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '1' && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '\0'
-                && glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)][(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != ' ')
-                i += 0.1;
-            else
-                break ;
-        }
-        if (i >= MOV_SPD + 1)
-        {
-            glob->px -= (sin(glob->pa) * MOV_SPD);
-            glob->py += (cos(glob->pa) * MOV_SPD);
-        }
-    }
-    else if (key == L_ARROW)
-    {
-        glob->pa -= ROT_SPD;
-        if (glob->pa < 0)
-            glob->pa += 2 * PI;
-    }
-    else if (key == R_ARROW)
-    {
-        glob->pa += ROT_SPD;
-        if (glob->pa > 2 * PI)
-            glob->pa -= 2 * PI;
-    }
+void	ft_q(t_glob *glob, float i)
+{
+	while (i < MOV_SPD + 1)
+	{
+		if (glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '1'
+			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != '\0'
+			&& glob->map[(int)((glob->py - cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px + sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+			i += 0.1;
+		else
+			break ;
+	}
+	if (i >= MOV_SPD + 1)
+	{
+		glob->px += (sin(glob->pa) * MOV_SPD);
+		glob->py -= (cos(glob->pa) * MOV_SPD);
+	}
+}
+
+void	ft_s(t_glob *glob, float i)
+{
+	while (i < MOV_SPD + 1)
+	{
+		if (glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '1'
+			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != '\0'
+			&& glob->map[(int)((glob->py - sin(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - cos(glob->pa) * i) / SQR_SIZE)] != ' ')
+			i += 0.1;
+		else
+			break ;
+	}
+	if (i >= MOV_SPD + 1)
+	{
+		glob->px -= (cos(glob->pa) * MOV_SPD);
+		glob->py -= (sin(glob->pa) * MOV_SPD);
+	}
+}
+
+void	ft_d(t_glob *glob, float i)
+{
+	while (i < MOV_SPD + 1)
+	{
+		if (glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '1'
+			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != '\0'
+			&& glob->map[(int)((glob->py + cos(glob->pa) * i) / SQR_SIZE)]
+			[(int)((glob->px - sin(glob->pa) * i) / SQR_SIZE)] != ' ')
+			i += 0.1;
+		else
+			break ;
+	}
+	if (i >= MOV_SPD + 1)
+	{
+		glob->px -= (sin(glob->pa) * MOV_SPD);
+		glob->py += (cos(glob->pa) * MOV_SPD);
+	}
+}
+
+void	ft_move(t_glob *glob, int key)
+{
+	if (key == Z)
+		ft_z(glob, 1);
+	else if (key == Q)
+		ft_q(glob, 1);
+	else if (key == S)
+		ft_s(glob, 1);
+	else if (key == D)
+		ft_d(glob, 1);
+	else if (key == L_ARROW)
+	{
+		glob->pa -= ROT_SPD;
+		if (glob->pa < 0)
+			glob->pa += 2 * PI;
+	}
+	else if (key == R_ARROW)
+	{
+		glob->pa += ROT_SPD;
+		if (glob->pa > 2 * PI)
+			glob->pa -= 2 * PI;
+	}
 }

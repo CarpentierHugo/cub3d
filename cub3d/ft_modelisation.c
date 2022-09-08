@@ -12,20 +12,11 @@
 
 #include "cub3d.h"
 
-void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra, int **data)
+float    ft_premod(t_glob *glob, int *lineo, float *lineh)
 {
-    float     lineh;
-    int       lineo;
-    int     y;
-    float   ty;
-    float   tx;
-    float   ty_step;
-    int     c;
     float   ty_off;
     float   ca;
-    float   sinry;
-    float   cosrx;
-
+    
     ca = glob->pa - ra;
     if (ca < 0)
         ca += 2 * PI;
@@ -41,7 +32,19 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
         lineh = SCREEN_H;
     }
     lineo = SCREEN_H / 2 - (lineh / 2);
-    ty = ty_off * ty_step;
+    return (ty_off * ty_step);
+}
+
+void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, float ra)
+{
+    float     lineh;
+    int       lineo;
+    int     y;
+    float   ty;
+    float   tx;
+    float   ty_step;
+    int     c;
+
     y = -1;
     sinry = ry - sin(ra);
     cosrx = rx - cos(ra);
@@ -67,32 +70,25 @@ void    ft_modelisation(t_glob *glob, float length, int i, float rx, float ry, f
                 else if (ra >= PI / 4 && ra <= 3 * PI / 4)
                     c = glob->n_img->data[(int)tx + (int)ty * RES];
             }
-            data[0][(int)(i + (y + lineo) * SCREEN_W)] = c;
+            glob->data[(int)(i + (y + lineo) * SCREEN_W)] = c;
             ty += ty_step;
     }
     y = -1;
     while (++y < lineo)
-        data[0][(int)(i + y * SCREEN_W)] = glob->ceiling;
+        glob->data[(int)(i + y * SCREEN_W)] = glob->ceiling;
     y = lineo + lineh - 1;
     while (++y < SCREEN_H)
-        data[0][(int)(i + y * SCREEN_W)] = glob->floor;
+        glob->data[(int)(i + y * SCREEN_W)] = glob->floor;
 }
 
-void    ft_raycasting(t_glob *glob)
+void    ft_ray_maker(t_glob *glob, float ra, int i)
 {
     float   rx;
     float   ry;
-    float   ra;
-    float    length;
-    int     i;
+    float   length;
     float   sinra;
     float   cosra;
-
-    i = 0;
-    ra = glob->pa - DR * (FOV / 2);
-    if (ra < 0)
-        ra += 2 * PI;
-    i = -1;
+    
     while (++i < SCREEN_W)
     {
         rx = glob->px;
@@ -106,11 +102,21 @@ void    ft_raycasting(t_glob *glob)
             ry += sinra;
             length++;
         }
-        ft_modelisation(glob, length, i, rx, ry, ra, &glob->data);
+        ft_modelisation(glob, length, i, rx, ry, ra);
         ra += DR * FOV / SCREEN_W;
         if (ra > 2 * PI)
             ra -= 2 * PI;
     }
+}
+
+void    ft_raycasting(t_glob *glob)
+{
+    float   ra;
+
+    ra = glob->pa - DR * (FOV / 2);
+    if (ra < 0)
+        ra += 2 * PI;
+    ft_ray_maker(glob, ra, -1);
     mlx_put_image_to_window(glob->mlx_ptr, glob->win_ptr, glob->image, 0, 0);
     mlx_pixel_put(glob->mlx_ptr, glob->win_ptr, SCREEN_W / 2, SCREEN_H / 2, 0x00FFFFFF);
 }
