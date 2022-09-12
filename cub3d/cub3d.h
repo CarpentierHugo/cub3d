@@ -35,10 +35,10 @@
 
 # define PI 3.1415926535
 # define DR 0.01745329251
-# define SQR 64
+# define SQR 32
 # define RES 32
 # define FOV 60
-# define MOV_SPD 6.4
+# define MOV_SPD SQR / 10//6.4
 # define ROT_SPD 0.05
 # define SCREEN_H 800
 # define SCREEN_W 1200

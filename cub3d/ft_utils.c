@@ -54,23 +54,23 @@ static void	ft_init_img(t_glob *glob)
 {
 	glob->n_img->h = RES;
 	glob->n_img->w = RES;
-	glob->n_img->bpp = 8;
-	glob->n_img->sl = 8 * RES;
+	glob->n_img->bpp = 16;
+	glob->n_img->sl = 16 * RES;
 	glob->n_img->e = 0;
 	glob->s_img->h = RES;
 	glob->s_img->w = RES;
-	glob->s_img->bpp = 8;
-	glob->s_img->sl = 8 * RES;
+	glob->s_img->bpp = 16;
+	glob->s_img->sl = 16 * RES;
 	glob->s_img->e = 0;
 	glob->w_img->h = RES;
 	glob->w_img->w = RES;
-	glob->w_img->bpp = 8;
-	glob->w_img->sl = 8 * RES;
+	glob->w_img->bpp = 16;
+	glob->w_img->sl = 16 * RES;
 	glob->w_img->e = 0;
 	glob->e_img->h = RES;
 	glob->e_img->w = RES;
-	glob->e_img->bpp = 8;
-	glob->e_img->sl = 8 * RES;
+	glob->e_img->bpp = 16;
+	glob->e_img->sl = 16 * RES;
 	glob->e_img->e = 0;
 }
 

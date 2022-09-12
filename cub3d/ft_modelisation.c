@@ -16,7 +16,7 @@ int	ft_find_wall(t_glob *glob, float ty)
 {
 	float	tx;
 
-	tx = (int)(((int)glob->rx + (int)glob->ry) / (SQR / RES)) % RES;
+	tx = (int)(((int)glob->rx + (int)glob->ry) * (RES / SQR)) % RES;
 	if (glob->map[(int)((glob->ry - 1) / SQR)][(int)(glob->rx / SQR)] != '1'
 		&& (int)((glob->ry - 1) / SQR) == (int)((glob->s) / SQR))
 		return (glob->n_img->data[(int)tx + (int)ty * RES]);
@@ -29,7 +29,7 @@ int	ft_find_wall(t_glob *glob, float ty)
 	else if (glob->map[(int)(glob->ry / SQR)][(int)((glob->rx - 1) / SQR)]
 		!= '1' && (int)((glob->rx - 1) / SQR) == (int)((glob->c) / SQR))
 		return (glob->w_img->data[(int)tx + (int)ty * RES]);
-	if ((glob->ra <= PI / 4 && glob->ra >= 0) || (glob->ra
+	else if ((glob->ra <= PI / 4 && glob->ra >= 0) || (glob->ra
 			>= 7 * PI / 4 && glob->ra <= 2 * PI))
 		return (glob->w_img->data[(int)tx + (int)ty * RES]);
 	else if (glob->ra >= 5 * PI / 4 && glob->ra <= 7 * PI / 4)
