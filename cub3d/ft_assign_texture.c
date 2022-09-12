@@ -19,15 +19,13 @@ int	ft_north_texture(t_glob *glob, char *texture, int length)
 	length = 0;
 	while (texture[length] != '\0' && texture[length] != ' ')
 		length++;
-	if (glob->n_img->path_texture != NULL)
+	if (glob->s_img->path_texture != NULL)
 		return (1);
 	i = -1;
-	glob->n_img->path_texture = malloc(sizeof(char) * length + 1);
+	glob->s_img->path_texture = malloc(sizeof(char) * length + 1);
 	while (texture[++i] && texture[i] != ' ')
-	{
-		glob->n_img->path_texture[i] = texture[i];
-	}
-	glob->n_img->path_texture[i] = '\0';
+		glob->s_img->path_texture[i] = texture[i];
+	glob->s_img->path_texture[i] = '\0';
 	return (0);
 }
 
@@ -38,19 +36,34 @@ int	ft_south_texture(t_glob *glob, char *texture, int length)
 	length = 0;
 	while (texture[length] != '\0' && texture[length] != ' ')
 		length++;
-	if (glob->s_img->path_texture != NULL)
+	if (glob->n_img->path_texture != NULL)
 		return (1);
 	i = -1;
-	glob->s_img->path_texture = malloc(sizeof(char) * length + 1);
+	glob->n_img->path_texture = malloc(sizeof(char) * length + 1);
 	while (texture[++i] && texture[i] != ' ')
-	{
-		glob->s_img->path_texture[i] = texture[i];
-	}
-	glob->s_img->path_texture[i] = '\0';
+		glob->n_img->path_texture[i] = texture[i];
+	glob->n_img->path_texture[i] = '\0';
 	return (0);
 }
 
 int	ft_west_texture(t_glob *glob, char *texture, int length)
+{
+	int	i;
+
+	length = 0;
+	while (texture[length] != '\0' && texture[length] != ' ')
+		length++;
+	if (glob->e_img->path_texture != NULL)
+		return (1);
+	i = -1;
+	glob->e_img->path_texture = malloc(sizeof(char) * length + 1);
+	while (texture[++i] && texture[i] != ' ')
+		glob->e_img->path_texture[i] = texture[i];
+	glob->e_img->path_texture[i] = '\0';
+	return (0);
+}
+
+int	ft_east_texture(t_glob *glob, char *texture, int length)
 {
 	int	i;
 
@@ -64,24 +77,5 @@ int	ft_west_texture(t_glob *glob, char *texture, int length)
 	while (texture[++i] && texture[i] != ' ')
 		glob->w_img->path_texture[i] = texture[i];
 	glob->w_img->path_texture[i] = '\0';
-	return (0);
-}
-
-int	ft_east_texture(t_glob *glob, char *texture, int length)
-{
-	int	i;
-
-	length = 0;
-	while (texture[length] != '\0' && texture[length] != ' ')
-		length++;
-	if (glob->e_img->path_texture != NULL)
-		return (1);
-	i = -1;
-	glob->e_img->path_texture = malloc(sizeof(char) * length + 1);
-	while (texture[++i] && texture[i] != ' ')
-	{
-		glob->e_img->path_texture[i] = texture[i];
-	}
-	glob->e_img->path_texture[i] = '\0';
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 15:52:13 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/12 15:52:51 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 20:46:28 by hcarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ int	ft_find_wall(t_glob *glob, float ty)
 {
 	float	tx;
 
-	tx = (int)(((int)glob->rx + (int)glob->ry) / (SQR / RES)) % RES;
+	tx = (int)(((int)glob->rx + (int)glob->ry) * (RES / SQR)) % RES;
 	if (glob->map[(int)((glob->ry - 1) / SQR)][(int)(glob->rx / SQR)] != '1'
 		&& (int)((glob->ry - 1) / SQR) == (int)((glob->s) / SQR))
-		return (glob->n_img->data[(int)tx + (int)ty * RES]);
+		return (glob->n_img->data[(int)(RES - 1 - (int)tx + (int)ty * RES)]);
 	else if (glob->map[(int)((glob->ry + 1) / SQR)][(int)(glob->rx / SQR)]
 		!= '1' && (int)((glob->ry + 1) / SQR) == (int)((glob->s) / SQR))
 		return (glob->s_img->data[(int)tx + (int)ty * RES]);
 	else if (glob->map[(int)(glob->ry / SQR)][(int)((glob->rx + 1) / SQR)]
 		!= '1' && (int)((glob->rx + 1) / SQR) == (int)((glob->c) / SQR))
-		return (glob->e_img->data[(int)tx + (int)ty * RES]);
+		return (glob->e_img->data[(int)(RES - 1 - (int)tx) + (int)ty * RES]);
 	else if (glob->map[(int)(glob->ry / SQR)][(int)((glob->rx - 1) / SQR)]
 		!= '1' && (int)((glob->rx - 1) / SQR) == (int)((glob->c) / SQR))
 		return (glob->w_img->data[(int)tx + (int)ty * RES]);
@@ -35,9 +35,9 @@ int	ft_find_wall(t_glob *glob, float ty)
 	else if (glob->ra >= 5 * PI / 4 && glob->ra <= 7 * PI / 4)
 		return (glob->s_img->data[(int)tx + (int)ty * RES]);
 	else if (glob->ra >= 3 * PI / 4 && glob->ra <= 5 * PI / 4)
-		return (glob->e_img->data[(int)tx + (int)ty * RES]);
+		return (glob->e_img->data[(int)(RES - (int)tx) + (int)ty * RES]);
 	else
-		return (glob->n_img->data[(int)tx + (int)ty * RES]);
+		return (glob->n_img->data[(int)(RES - (int)tx) + (int)ty * RES]);
 }
 
 float	ft_premod(t_glob *glob, int *lineo, float *lineh, float *ty_step)
