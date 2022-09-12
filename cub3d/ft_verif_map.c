@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 17:35:51 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 21:53:51 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:56:34 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_error_map(int error, t_glob *glob)
 	else if (error == 2)
 		printf("Too many starting position in glob->map !\n");
 	else if (error == 3)
-		printf("Map glob->is not surrounded by walls !\n");
+		printf("Map is not surrounded by walls !\n");
 	else if (error == 4)
 		printf("Map has no walls\n");
 	else if (error == 5)

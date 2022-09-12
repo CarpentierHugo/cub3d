@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/12 11:39:34 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:52:09 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	main(int argc, char **argv)
 
 	glob->minimap = 0;
 	if (argc != 2)
-		return (1);
+		return (printf("Error\nFormat ./cub3D path_to_map\n"), 1);
 	argc = ft_strlen(argv[1]);
 	if (argv[1][argc - 4] != '.' || argv[1][argc - 3] != 'c'
 		|| argv[1][argc - 2] != 'u' || argv[1][argc - 1] != 'b')

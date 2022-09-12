@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/12 11:22:10 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 12:30:09 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,11 @@ int				ft_path_texture(t_glob *glob, char direction,
 int				ft_map_beginning(char *str);
 int				ft_str_is_beginning(char *str);
 void			ft_free_number(char **number, int i, t_glob *glob, int index);
-void			first_line(t_glob *glob, int test);
-void			second_line(t_glob *glob, int test);
-void			third_line(t_glob *glob, int test);
-void			forth_line(t_glob *glob, int test, int k);
-void			fifth_line(t_glob *glob, int test, int k);
+void			first_line(t_glob *glob, int test, int j, int i);
+void			second_line(t_glob *glob, int test, int j, int i);
+void			third_line(t_glob *glob, int test, int j, int i);
+void			forth_line(t_glob *glob, int test, int k, int j);
+void			fifth_line(t_glob *glob, int test, int k, int j);
 int				ft_strlen(char *str);
 void			ft_draw_square(t_glob *glob, int posx, int posy, int color);
 int				ft_screen(t_glob *glob);
@@ -135,5 +135,6 @@ int				ft_deal_key(int key, void *param);
 int				ft_count_words(char *str, char c);
 void			ft_set_to_null(t_glob *glob);
 void			ft_exit2(t_glob *glob);
+int				ft_strlen_lines(char *str);
 
 #endif
