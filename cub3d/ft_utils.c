@@ -38,13 +38,13 @@ static int	ft_screen2(t_glob *glob)
 	glob->e_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr,
 			glob->e_img->path_texture, &glob->e_img->w, &glob->e_img->h);
 	if (glob->e_img->ptr == NULL)
-		return (1);
+		return (printf("Error\nWrong texture path\n"), 1);
 	glob->e_img->data = (int *)mlx_get_data_addr(glob->e_img->ptr,
 			&glob->e_img->bpp, &glob->e_img->sl, &glob->e_img->e);
 	glob->w_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr,
 			glob->w_img->path_texture, &glob->w_img->w, &glob->w_img->h);
 	if (glob->w_img->ptr == NULL)
-		return (1);
+		return (printf("Error\nWrong texture path\n"), 1);
 	glob->w_img->data = (int *)mlx_get_data_addr(glob->w_img->ptr,
 			&glob->w_img->bpp, &glob->w_img->sl, &glob->w_img->e);
 	return (0);
@@ -80,13 +80,13 @@ int	ft_screen(t_glob *glob)
 	glob->n_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr,
 			glob->n_img->path_texture, &glob->n_img->w, &glob->n_img->h);
 	if (glob->n_img->ptr == NULL)
-		return (1);
+		return (printf("Error\nWrong texture path\n"), 1);
 	glob->n_img->data = (int *)mlx_get_data_addr(glob->n_img->ptr,
 			&glob->n_img->bpp, &glob->n_img->sl, &glob->n_img->e);
 	glob->s_img->ptr = mlx_xpm_file_to_image(glob->mlx_ptr,
 			glob->s_img->path_texture, &glob->s_img->w, &glob->s_img->h);
 	if (glob->s_img->ptr == NULL)
-		return (1);
+		return (printf("Error\nWrong texture path\n"), 1);
 	if (ft_screen2(glob) == 1)
 		return (1);
 	return (0);
