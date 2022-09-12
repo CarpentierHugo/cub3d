@@ -49,20 +49,12 @@ void	ft_q(t_glob *glob, float i)
 			[(int)((glob->px + glob->s * i) / SQR)] != ' ')
 			i += 0.1;
 		else
-			break;
+			break ;
 	}
 	if (i >= MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != '1'
-			&& glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != '\0'
-			&& glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != ' ')
-		{
-			glob->px += (glob->s * MOV_SPD);
-			glob->py -= (glob->c * MOV_SPD);
-		}
+		glob->px += (glob->s * MOV_SPD);
+		glob->py -= (glob->c * MOV_SPD);
 	}
 }
 
@@ -103,20 +95,12 @@ void	ft_d(t_glob *glob, float i)
 			[(int)((glob->px - glob->s * i) / SQR)] != ' ')
 			i += 0.1;
 		else
-			break;
+			break ;
 	}
 	if (i >= MOV_SPD + 1)
 	{
-		if (glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != '1'
-			&& glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != '\0'
-			&& glob->map[(int)((glob->py + glob->s * MOV_SPD) / SQR)]
-			[(int)((glob->px + glob->c * MOV_SPD) / SQR)] != ' ')
-		{
-			glob->px -= (glob->s * MOV_SPD);
-			glob->py += (glob->c * MOV_SPD);
-		}
+		glob->px -= (glob->s * MOV_SPD);
+		glob->py += (glob->c * MOV_SPD);
 	}
 }
 
