@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/12 12:30:09 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:48:51 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 
 # define PI 3.1415926535
 # define DR 0.01745329251
-# define SQR 32
+# define SQR 64
 # define RES 32
 # define FOV 60
 # define MOV_SPD SQR / 10//6.4

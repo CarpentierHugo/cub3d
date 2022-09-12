@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 15:52:13 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 20:46:28 by hcarpent         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:50:55 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_find_wall(t_glob *glob, float ty)
 {
 	float	tx;
 
-	tx = (int)(((int)glob->rx + (int)glob->ry) * (RES / SQR)) % RES;
+	tx = (int)(((int)glob->rx + (int)glob->ry) / (SQR / RES)) % RES;
 	if (glob->map[(int)((glob->ry - 1) / SQR)][(int)(glob->rx / SQR)] != '1'
 		&& (int)((glob->ry - 1) / SQR) == (int)((glob->s) / SQR))
 		return (glob->n_img->data[(int)tx + (int)ty * RES]);
