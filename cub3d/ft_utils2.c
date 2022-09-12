@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 19:53:55 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 19:55:18 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 21:22:40 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,20 @@ int	ft_deal_key(int key, void *param)
 	else
 		ft_raycasting(glob);
 	return (0);
+}
+
+void	ft_exit2(t_glob *glob)
+{
+	if (glob->n_img->path_texture != NULL)
+		free(glob->n_img->path_texture);
+	if (glob->s_img->path_texture != NULL)
+		free(glob->s_img->path_texture);
+	if (glob->e_img->path_texture != NULL)
+		free(glob->e_img->path_texture);
+	if (glob->w_img->path_texture != NULL)
+		free(glob->w_img->path_texture);
+	glob->n_img->path_texture = NULL;
+	glob->s_img->path_texture = NULL;
+	glob->e_img->path_texture = NULL;
+	glob->w_img->path_texture = NULL;
 }

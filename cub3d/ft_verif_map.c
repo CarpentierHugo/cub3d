@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 17:35:51 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 18:38:07 by hcarpent         ###   ########.fr       */
+/*   Updated: 2022/09/08 21:53:51 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,30 @@ static void	ft_error_map(int error, t_glob *glob)
 	exit(1);
 }
 
-static void	ft_check_empty_lines(t_glob *glob)
+static void	ft_check_empty_lines(t_glob *glob, int i, int j, int k)
 {
-	int	i;
-	int	j;
-
-	i = -1;
-	while (glob->map[++i])
+	while (glob->map[i] != 0 && glob->map[++i] != 0)
 	{
 		j = 0;
 		while (glob->map[i][j] == ' ')
 			j++;
 		if (glob->map[i][j] == '\0')
-			ft_error_map(0, glob);
+		{
+			while (glob->map[i] != 0)
+			{
+				j = 0;
+				while (glob->map[i][j] != '\0')
+				{
+					j++;
+					if (glob->map[i][j] != ' ')
+						k++;
+				}
+				i++;
+			}
+			if (k != 0)
+				ft_error_map(0, glob);
+			k = 0;
+		}
 	}
 }
 
@@ -99,7 +110,7 @@ void	ft_verif_map(t_glob *glob)
 	glob->iszero = 0;
 	glob->ispos = 0;
 	y = -1;
-	ft_check_empty_lines(glob);
+	ft_check_empty_lines(glob, -1, 0, 0);
 	while (glob->map[++y])
 	{
 		x = -1;

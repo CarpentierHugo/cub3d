@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 19:40:15 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 19:55:13 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 21:20:26 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	ft_exit(t_glob *glob)
 	glob->s_img->ptr = NULL;
 	glob->e_img->ptr = NULL;
 	glob->w_img->ptr = NULL;
+	ft_exit2(glob);
 	mlx_loop_end(glob->mlx_ptr);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 21:41:45 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 20:48:55 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:22:10 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_glob
 	int					minimap;
 	float				c;
 	float				s;
+	int					count;
 	int					infinite;
 	char				**map;
 	int					*data;
@@ -91,7 +92,7 @@ typedef struct s_glob
 	float				ry;
 	float				rx;
 	float				ra;
-	int					length;
+	float				length;
 }	t_glob;
 
 int				ft_get_textures(t_glob *glob, int i);
@@ -132,5 +133,7 @@ int				ft_mouse(int button, int x, int y, void *param);
 void			ft_draw_player(t_glob *glob, int size, int color);
 int				ft_deal_key(int key, void *param);
 int				ft_count_words(char *str, char c);
+void			ft_set_to_null(t_glob *glob);
+void			ft_exit2(t_glob *glob);
 
 #endif

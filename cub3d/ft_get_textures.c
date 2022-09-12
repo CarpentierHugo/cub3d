@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:36:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 19:03:21 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:28:05 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,30 @@ void	ft_free_number(char **number, int i, t_glob *glob, int index)
 	free(number);
 }
 
-void	ft_set_to_null(t_glob *glob)
+int	ft_if_while(t_glob *glob, char direction, int *i, int j)
 {
-	glob->n_img->path_texture = NULL;
-	glob->s_img->path_texture = NULL;
-	glob->w_img->path_texture = NULL;
-	glob->e_img->path_texture = NULL;
-	glob->n_img->ptr = NULL;
-	glob->s_img->ptr = NULL;
-	glob->e_img->ptr = NULL;
-	glob->w_img->ptr = NULL;
+	if (direction != '\0'
+		&& ft_path_texture(glob, direction, j, glob->map[(*i)] + j)
+		== 0)
+		glob->count += 1;
+	else
+	{
+		if (glob->count < 6 && glob->n_img->path_texture != NULL
+			&& glob->s_img->path_texture != NULL
+			&& glob->e_img->path_texture != NULL
+			&& glob->w_img->path_texture != NULL
+			&& glob->floor != -1 && glob->ceiling != -1)
+			return (printf("Error\nToo few argument before map\n")
+				, 1);
+		else
+			return (printf("Error\nToo many elements before map\n")
+				, 1);
+	}
+	return (0);
 }
 
-int	ft_while_get_textures(t_glob *glob, char direction, int *i, int *c)
+int	ft_while_get_textures(t_glob *glob, char direction, int *i, int j)
 {
-	int	j;
-
-	j = 0;
 	while (glob->map[++(*i)] != 0)
 	{
 		if (ft_str_is_beginning(glob->map[(*i)]) == 1)
@@ -70,29 +77,15 @@ int	ft_while_get_textures(t_glob *glob, char direction, int *i, int *c)
 		if (glob->map[(*i)][j]
 			&& check_direction(glob->map[(*i)][j], glob->map[(*i)][j + 1]) != 0)
 			direction = glob->map[(*i)][j];
-		if (check_direction(glob->map[(*i)][j], glob->map[(*i)][j + 1]) == 1
-			&& (*c) < 6)
+		if (glob->map[(*i)][j] && check_direction(glob->map[(*i)][j],
+			glob->map[(*i)][j + 1]) == 1 && glob->count < 6)
 			return (printf("Error\nInvalid argument before map\n"), 1);
 		if (glob->map[(*i)][j])
 			j += 2;
 		while (glob->map[(*i)][j] && glob->map[(*i)][j] == ' ')
 			j++;
-		if (glob->map[(*i)][j])
-		{
-			if (direction != '\0'
-				&& ft_path_texture(glob, direction, j, glob->map[(*i)] + j)
-				== 0)
-				(*c) += 1;
-			else
-			{
-				if ((*c) < 6)
-					return (printf("Error\nToo few argument before map\n")
-						, ft_free_map(glob), 1);
-				else
-					return (printf("Error\nToo many elements before map\n")
-						, ft_free_map(glob), 1);
-			}
-		}
+		if (glob->map[(*i)][j] && ft_if_while(glob, direction, i, j) == 1)
+			return (1);
 		j = 0;
 		direction = '\0';
 	}
@@ -101,18 +94,18 @@ int	ft_while_get_textures(t_glob *glob, char direction, int *i, int *c)
 
 int	ft_get_textures(t_glob *glob, int i)
 {
-	int		count_texture;
 	char	direction;
 
 	direction = '\0';
-	count_texture = 0;
+	glob->free_map = glob->map;
+	glob->count = 0;
 	glob->map_begin = -1;
 	ft_set_to_null(glob);
-	if (ft_while_get_textures(glob, direction, &i, &count_texture) == 1)
+	if (ft_while_get_textures(glob, direction, &i, 0) == 1)
 		return (1);
-	if (count_texture != 6)
+	if (glob->count != 6)
 		return (printf("Error\nToo few elements before map\n")
-			, ft_free_map(glob), 1);
+			, 1);
 	while (glob->map[i] != 0)
 	{
 		if (ft_map_beginning(glob->map[i]) == 1)
@@ -122,7 +115,7 @@ int	ft_get_textures(t_glob *glob, int i)
 	if (glob->map[i] == 0)
 	{
 		printf("Error\nThere is no map is the file\n");
-		return (ft_free_map(glob), 2);
+		return (2);
 	}
 	glob->map_begin = i;
 	return (0);

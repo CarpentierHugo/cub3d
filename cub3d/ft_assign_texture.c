@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 17:59:00 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/08 18:00:35 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/08 21:42:32 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,7 @@ int	ft_west_texture(t_glob *glob, char *texture, int length)
 	i = -1;
 	glob->w_img->path_texture = malloc(sizeof(char) * length + 1);
 	while (texture[++i] && texture[i] != ' ')
-	{
 		glob->w_img->path_texture[i] = texture[i];
-	}
 	glob->w_img->path_texture[i] = '\0';
 	return (0);
 }
