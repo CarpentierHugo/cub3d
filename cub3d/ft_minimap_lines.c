@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 19:14:33 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/12 12:31:31 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 13:01:11 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ void	first_line(t_glob *glob, int test, int j, int i)
 	scale = 0;
 	while (++i < 5)
 	{
-		if ((int)((glob->px / SQR) + j)
+		printf("%d\n", (int)(glob->py / SQR) - 2);
+		if (((int)(glob->px / SQR) + j)
 			> ft_strlen_lines(glob->map[(int)(glob->py / SQR) - 2]))
 			ft_draw_square(glob, scale, 0, 0);
 		else if (((int)(glob->py / SQR) - 2) < 0
-			|| (int)((glob->px / SQR) + j) < 0
-			|| (int)((glob->px / SQR) + j)
-			> ft_strlen(glob->map[(int)((glob->py / SQR) - 2)]))
+			|| (int)(glob->px / SQR) + j < 0)
 			ft_draw_square(glob, scale, 0, 0);
 		else if (glob->map[(int)(glob->py / SQR) - 2]
 					[(int)(glob->px / SQR) + j] == '1')
@@ -47,11 +46,11 @@ void	second_line(t_glob *glob, int test, int j, int i)
 	scale = 0;
 	while (++i < 5)
 	{
-		if ((int)((glob->px / SQR) + j)
+		if ((int)(glob->px / SQR) + j
 			> ft_strlen_lines(glob->map[(int)(glob->py / SQR) - 1]))
 			ft_draw_square(glob, scale, test, 0);
 		else if (((int)(glob->py / SQR) - 1) < 0
-			|| (int)((glob->px / SQR) + j) < 0)
+			|| (int)(glob->px / SQR) + j < 0)
 			ft_draw_square(glob, scale, test, 0);
 		else if (glob->map[(int)(glob->py / SQR) - 1]
 					[(int)(glob->px / SQR) + j] == '1')
@@ -73,13 +72,11 @@ void	third_line(t_glob *glob, int test, int j, int i)
 	scale = 0;
 	while (++i < 5)
 	{
-		if ((int)((glob->px / SQR) + j)
+		if ((int)(glob->px / SQR) + j
 			> ft_strlen_lines(glob->map[(int)(glob->py / SQR)]))
 			ft_draw_square(glob, scale, test * 2, 0);
 		else if (((int)(glob->py / SQR)) < 0
-				|| (int)((glob->px / SQR) + j) < 0
-				|| (int)((glob->px / SQR) + j)
-				> ft_strlen(glob->map[(int)((glob->py / SQR))]))
+				|| (int)(glob->px / SQR) + j < 0)
 			ft_draw_square(glob, scale, test * 2, 0);
 		else if (glob->map[(int)(glob->py / SQR)]
 					[(int)(glob->px / SQR) + j] == '1')
@@ -105,11 +102,11 @@ void	forth_line(t_glob *glob, int test, int k, int j)
 	i = -1;
 	while (++i < 5 && ++j != -4)
 	{
-		if ((int)((glob->px / SQR) + j)
+		if ((int)(glob->px / SQR) + j
 			> ft_strlen_lines(glob->map[(int)(glob->py / SQR) + 1]))
 			ft_draw_square(glob, scale, scale_fix, 0);
 		else if (((int)(glob->py / SQR) + 1) < k - k
-			|| (int)((glob->px / SQR) + j) < 0)
+			|| (int)(glob->px / SQR) + j < 0)
 			ft_draw_square(glob, scale, scale_fix, 0);
 		else if (glob->map[(int)(glob->py / SQR) + 1]
 					[(int)(glob->px / SQR) + j] == '1')
@@ -134,11 +131,11 @@ void	fifth_line(t_glob *glob, int test, int k, int j)
 	i = -1;
 	while (++i < 5 && ++j != -4)
 	{
-		if ((int)((glob->px / SQR) + j)
+		if ((int)(glob->px / SQR) + j
 			> ft_strlen_lines(glob->map[(int)(glob->py / SQR) + 2]))
 			ft_draw_square(glob, scale, scale_fix, 0);
 		else if (((int)(glob->py / SQR) + 2) > k - 1
-			|| (int)((glob->px / SQR) + j) < 0)
+			|| (int)(glob->px / SQR) + j < 0)
 			ft_draw_square(glob, scale, scale_fix, 0);
 		else if (glob->map[(int)(glob->py / SQR) + 2]
 					[(int)(glob->px / SQR) + j] == '1')
