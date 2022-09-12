@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:16:59 by hcarpent          #+#    #+#             */
-/*   Updated: 2022/09/08 22:02:25 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:39:34 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,16 @@ char	**ft_split_modif(char *str, char c, int i, int k)
 	return (tab);
 }
 
-void	ft_parsing(char *mapfile, t_glob *glob, int i, int size)
+int	ft_parsing(char *mapfile, t_glob *glob, int size)
 {
 	char	*mapstr;
 	char	buf;
 	int		fd;
 
 	glob->map = NULL;
-	while (mapfile[i])
-		i++;
-	if (mapfile[i - 4] != '.' || mapfile[i - 3] != 'c'
-		|| mapfile[i - 2] != 'u' || mapfile[i - 1] != 'b')
-		exit(1);
 	fd = open(mapfile, O_RDONLY);
 	if (fd < 0 || fd > 1024 || read(fd, &buf, 0) < 0)
-		exit(1);
+		return (printf("Error\nCouldn't open file\n"), 1);
 	while (read(fd, &buf, 1))
 		size++;
 	close(fd);
@@ -83,6 +78,7 @@ void	ft_parsing(char *mapfile, t_glob *glob, int i, int size)
 	close(fd);
 	glob->map = ft_split_modif(mapstr, '\n', -1, ft_count_words(mapstr, '\n'));
 	free(mapstr);
+	return (0);
 }
 
 void	main2(t_glob *glob)
@@ -116,8 +112,9 @@ int	main(int argc, char **argv)
 	argc = ft_strlen(argv[1]);
 	if (argv[1][argc - 4] != '.' || argv[1][argc - 3] != 'c'
 		|| argv[1][argc - 2] != 'u' || argv[1][argc - 1] != 'b')
-		printf("Error\nFile extension not .cub\n");
-	ft_parsing(argv[1], glob, 0, 0);
+		return (printf("Error\nFile extension not .cub\n"), 1);
+	if (ft_parsing(argv[1], glob, 0) == 1)
+		return (1);
 	glob->ceiling = -1;
 	glob->floor = -1;
 	if (ft_get_textures(glob, -1) != 0)
