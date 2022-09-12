@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 17:35:51 by achatela          #+#    #+#             */
-/*   Updated: 2022/09/12 11:56:34 by achatela         ###   ########.fr       */
+/*   Updated: 2022/09/12 12:37:46 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	ft_error_map(int error, t_glob *glob)
 	if (error == 1)
 		printf("Map contains an invalid character !\n");
 	else if (error == 2)
-		printf("Too many starting position in glob->map !\n");
+		printf("Too many starting position in map !\n");
 	else if (error == 3)
 		printf("Map is not surrounded by walls !\n");
 	else if (error == 4)
