@@ -124,7 +124,7 @@ int	main(int argc, char **argv)
 	ft_verif_map(glob);
 	glob->mlx_ptr = mlx_init();
 	if (!glob->mlx_ptr)
-		return (ft_free(glob), 1);
+		return (printf("Error\nMlx_ptr failed\n"), ft_free(glob), 1);
 	main2(glob);
 	return (0);
 }
